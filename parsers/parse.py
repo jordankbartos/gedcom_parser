@@ -38,5 +38,3 @@ class GedcomParser:
 	def find_first_fam_entry(self):
 
 	def find_end_fam_entry(self):
-
-		
