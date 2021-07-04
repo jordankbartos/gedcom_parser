@@ -2,8 +2,8 @@
 import argparse
 import os
 
-from parse import GedcomParser
-from validate import validate_args
+from parsers.parse import GedcomParser
+from validate_args.validate import validate_args
 
 def parse_args():
     p= argparse.ArgumentParser(description="Convert GEDCOM files to CSV and CSV files to GEDCOM")
@@ -54,7 +54,7 @@ def parse_args():
         "-v", "--verbose",
         help="Verbose",
         action="store_true",
-		dest="verbose",
+        dest="verbose",
     )
 
     return p.parse_args()
@@ -72,11 +72,12 @@ if __name__ == "__main__":
     verbose = args.verbose
 
     if verbose:
+        os.environ["VERBOSE_OUTPUT"] = "True"
         print("--Arguments--")
-        print(f"direction: {direction}")
-        print(f"person_file: {person_file}")
-        print(f"family_file: {family_file}")
-        print(f"gedcome_file: {gedcom_file}")
+        print(f"\tdirection: {direction}")
+        print(f"\tperson_file: {person_file}")
+        print(f"\tfamily_file: {family_file}")
+        print(f"\tgedcome_file: {gedcom_file}")
 
     # validate file paths
     if not validate_args(
