@@ -5,8 +5,9 @@ import os
 from parsers.parse import GedcomParser
 from validate_args.validate import validate_args
 
+
 def parse_args():
-    p= argparse.ArgumentParser(description="Convert GEDCOM files to CSV and CSV files to GEDCOM")
+    p = argparse.ArgumentParser(description="Convert GEDCOM files to CSV and CSV files to GEDCOM")
 
     p.add_argument(
         "--dir",
@@ -21,7 +22,8 @@ def parse_args():
     )
 
     p.add_argument(
-        "-g", "--gedcom",
+        "-g",
+        "--gedcom",
         help="File path to the gedcom file to be read or generated",
         action="store",
         nargs=1,
@@ -31,7 +33,8 @@ def parse_args():
     )
 
     p.add_argument(
-        "-p", "--person-file",
+        "-p",
+        "--person-file",
         help="File path to the person csv file to be read or generated",
         action="store",
         nargs=1,
@@ -41,7 +44,8 @@ def parse_args():
     )
 
     p.add_argument(
-        "-f", "--family-file",
+        "-f",
+        "--family-file",
         help="File path to the familycsv file to be read or generated",
         action="store",
         nargs=1,
@@ -51,7 +55,8 @@ def parse_args():
     )
 
     p.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         help="Verbose",
         action="store_true",
         dest="verbose",
@@ -59,8 +64,10 @@ def parse_args():
 
     return p.parse_args()
 
+
 def save_output():
     return 1
+
 
 if __name__ == "__main__":
     # Get and check args
@@ -90,9 +97,9 @@ if __name__ == "__main__":
     else:
         if verbose:
             print("Validation succeeded")
-    
+
     parser = GedcomParser(gedcom_file=gedcom_file, person_file=person_file, family_file=family_file)
-    
+
     if direction == "GED2CSV":
         if verbose:
             print(f"Converting {gedcom_file} to CSV...")
@@ -107,4 +114,3 @@ if __name__ == "__main__":
         raise ValueError(f"How did you sneak direction={direction} into the args?")
 
     exit(save_output())
-
