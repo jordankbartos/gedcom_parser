@@ -2,7 +2,11 @@ repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v2.3.0
   hooks:
-    - id: check-yaml
+    - id: check-added-large-files
+    - id: check-ast
+    - id: check-docstring-first
+    - id: check-toml
+    - id: requirements-txt-fixer
     - id: end-of-file-fixer
     - id: trailing-whitespace
 - repo: https://github.com/psf/black
