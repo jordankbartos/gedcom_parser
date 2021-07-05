@@ -12,6 +12,8 @@ from .line import Line
 # sets the line length limit for an entry when CREATING a gedcom file. Entries too long to fit
 # in one line are split using CONC
 GEDCOM_MAX_LINE_LENGTH = 80
+ENTRY_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
+PARSER_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
 
 
 class Entry:
@@ -29,10 +31,11 @@ class Entry:
         elif not all([isinstance(v, str) for v in val]):
             raise ValueError("All lines must be string values")
         else:
-            self._lines = self.remove_cont_conc(lines)
+            self._lines = self.remove_cont_conc(val)
 
     @staticmethod
     def remove_cont_conc(lines: List[str]) -> List[str]:
+
         cont_re = re.compile("^\d+ CONT ")
         conc_re = re.compile("^\d+ CONC ")
 
@@ -51,6 +54,11 @@ class Entry:
                 ret[-1] = f"{ret[-1]}{conc_re.split(line)[-1]}"
             else:
                 ret.append(line)
+
+        if ENTRY_DEBUG:
+            print("REMOVE_CONT_CONC results:")
+            for x in ret:
+                print(f"\t{x}")
 
         return ret
 
@@ -122,7 +130,13 @@ class Entry:
                     pass
             else:
                 pass
+
             return ret
+
+        if ENTRY_DEBUG:
+            print("ADD_CONT_CONC input:")
+            for x in lines:
+                print(f"\t{x}")
 
         ret = []
         for i, line in enumerate(lines):
@@ -147,12 +161,46 @@ class Entry:
                 else:
                     ret.append(f"{depth + 1} {new_tag}")
 
+        if PARSER_DEBUG:
+            print("ADD_CONT_CONC results:")
+            for x in ret:
+                print(f"\t{x}")
+
         return ret
+
+    def to_col_name_dict(self):
+        """Transform lines into a CSV-file-friendly dictionary of col-title:value pairs
+
+        Tags are folded into eachother so that one entry can occupy a single row of the
+        CSV file. E.g.
+
+        0 @I42@ INDI
+        1 NAME Leonard Frank /Bartos/
+        2 GIVN Leonard Frank
+        2 NSFX RPh
+        1 SEX M
+        1 _UID 4EF44217DF0F40419968D80B5CC5FE8491FB
+
+        becomes
+
+        {
+            "type": "INDI",
+            "id:" @I42@",
+            "NAME": "Leonard Frand /Bartos/",
+            "NAME+GIVN": "Leonard Frank",
+            "NAME+NSFX": "RPh",
+            "SEX": "M",
+            "_UID": "4EF44217DF0F40419968D80B5CC5FE8491FB",
+        }
+        """
+        for line in self._lines:
+            if line.startswith("0"):
+                pass
+                # begin a new set of column headers
 
 
 class GedcomParser:
     def __init__(self, gedcom_file, family_file, person_file):
-        self.PARSER_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
         self.gedcom_file = gedcom_file
         self.family_file = family_file
         self.person_file = person_file
@@ -169,42 +217,60 @@ class GedcomParser:
         start_of_fam_section = self.get_start_fam()
         end_of_fam_section = self.get_end_fam()
 
-        if self.PARSER_DEBUG:
+        if PARSER_DEBUG:
             print("--Determined these indexes for INDI and FAM sections--")
             print(f"\tfirst INDI index: {start_of_indi_section}")
             print(f"\tlast  INDI index: {end_of_indi_section}")
             print(f"\tfirst FAM  index: {start_of_fam_section}")
             print(f"\tlast  FAM  index: {end_of_fam_section}")
 
+        self.indi_entries = []
         i = start_of_indi_section
         while i < start_of_fam_section:
             j = i + 1
-            while not self.gedcom_lines[j].startswith("0"):
+            while j < len(self.gedcom_lines) and not self.gedcom_lines[j].startswith("0"):
                 j += 1
 
-            if self.PARSER_DEBUG:
-                print("------------------------")
-                print(f"INDI RECORD BETWEEN {i} AND {j}")
-                print("ORIGINAL:")
+            # Make sure everything is looking ok
+            assert i < j
+            assert i >= start_of_indi_section
+            assert j <= start_of_fam_section
+            assert self.gedcom_lines[i].startswith("0")
+            assert self.gedcom_lines[j].startswith("0")
 
+            if PARSER_DEBUG:
+                print("------------------------")
+                print(f"INDI RECORD LINES {i}-{j}:")
                 for k in range(i, j):
                     print(f"\t{self.gedcom_lines[k][:-1]}")
-                print("REMOVE_CONT_CONC:")
 
-            ls = Entry.remove_cont_conc(self.gedcom_lines[i:j])
+            print("i:", i, "j:", j)
+            self.indi_entries.append(Entry(lines=self.gedcom_lines[i:j]))
 
-            if self.PARSER_DEBUG:
-                for x in ls:
-                    print(f"\t{x}")
-                print("ADD_CONT_CONC:")
+            i = j
 
-            ls = Entry.add_cont_conc(ls)
+        self.fam_entries = []
+        i = start_of_fam_section
+        while i < end_of_fam_section + 1:
+            j = i + 1
+            while j < len(self.gedcom_lines) and not self.gedcom_lines[j].startswith("0"):
+                j += 1
 
-            if self.PARSER_DEBUG:
-                for x in ls:
-                    print(f"\t{x}")
+            # Make sure everything is looking ok
+            assert i < j
+            assert i >= start_of_fam_section
+            assert j <= end_of_fam_section + 1
+            assert self.gedcom_lines[i].startswith("0")
+            assert self.gedcom_lines[j].startswith("0")
 
-            i = j + 1
+            if PARSER_DEBUG:
+                print("------------------------")
+                print(f"FAM RECORD LINES {i}-{j}:")
+                for k in range(i, j):
+                    print(f"\t{self.gedcom_lines[k][:-1]}")
+            self.fam_entries.append(Entry(lines=self.gedcom_lines[i:j]))
+
+            i = j
 
     def csv_to_gedcom(self):
         pass
