@@ -13,6 +13,7 @@ from .line import Line
 # in one line are split using CONC
 GEDCOM_MAX_LINE_LENGTH = 80
 
+
 class Entry:
     def __init__(self, lines: List[str]):
         self.lines = lines
@@ -41,7 +42,7 @@ class Entry:
             # the first two cases should be impossible on the first line
             if line.endswith("\n"):
                 line = line[:-1]
-            
+
             if cont_re.match(line):
                 assert i != 0
                 ret[-1] = f"{ret[-1]}<<CONT>>{cont_re.split(line)[-1]}"
@@ -55,7 +56,6 @@ class Entry:
 
     @staticmethod
     def add_cont_conc(lines: List[str]) -> List[str]:
-
         def get_tag_value_chunk(depth, tag, tag_value):
             """Helper function to determine when and how to split a tag value
             Parameters
@@ -71,7 +71,7 @@ class Entry:
             -------
             Tuple[bool, str, str, Union[str, None]]
                 [0] - boolean: whether the tag_value needed to be split or not
-                [1] - str: The tag for this line. Original tag, CONC, or CONT 
+                [1] - str: The tag for this line. Original tag, CONC, or CONT
                 [2] - str: the value of the split-off section of tag_value
                 [3] - str|None: the remainder of tag_value
             """
@@ -91,7 +91,9 @@ class Entry:
                     newline_index = tag_value.find("<<CONT>>")
 
                     if newline_index != -1:
-                        if (len_depth + len_tag + num_spaces + newline_index) < GEDCOM_MAX_LINE_LENGTH:
+                        if (
+                            len_depth + len_tag + num_spaces + newline_index
+                        ) < GEDCOM_MAX_LINE_LENGTH:
                             ret = (
                                 True,
                                 "CONT",
@@ -102,15 +104,19 @@ class Entry:
                             ret = (
                                 True,
                                 "CONC",
-                                tag_value[:GEDCOM_MAX_LINE_LENGTH - 1 - len_depth - len_tag - num_spaces],
-                                tag_value[GEDCOM_MAX_LINE_LENGTH - 1- len_depth - len_tag - num_spaces:],
+                                tag_value[
+                                    : GEDCOM_MAX_LINE_LENGTH - 1 - len_depth - len_tag - num_spaces
+                                ],
+                                tag_value[
+                                    GEDCOM_MAX_LINE_LENGTH - 1 - len_depth - len_tag - num_spaces :
+                                ],
                             )
                     else:
                         ret = (
                             True,
                             "CONC",
-                            tag_value[:GEDCOM_MAX_LINE_LENGTH - len_depth - len_tag - num_spaces],
-                            tag_value[GEDCOM_MAX_LINE_LENGTH - len_depth - len_tag - num_spaces:],
+                            tag_value[: GEDCOM_MAX_LINE_LENGTH - len_depth - len_tag - num_spaces],
+                            tag_value[GEDCOM_MAX_LINE_LENGTH - len_depth - len_tag - num_spaces :],
                         )
                 else:
                     pass
@@ -132,12 +138,9 @@ class Entry:
             ret.append(f"{depth} {tag} {tag_value}")
 
             while need_split:
-                (
-                    need_split,
-                    new_tag,
-                    prev_tag_value,
-                    next_tag_value
-                ) = get_tag_value_chunk(depth + 1, new_tag, next_tag_value)
+                (need_split, new_tag, prev_tag_value, next_tag_value) = get_tag_value_chunk(
+                    depth + 1, new_tag, next_tag_value
+                )
 
                 if prev_tag_value:
                     ret.append(f"{depth + 1} {new_tag} {prev_tag_value}")
@@ -180,9 +183,9 @@ class GedcomParser:
                 j += 1
 
             if self.PARSER_DEBUG:
-                print('------------------------')
+                print("------------------------")
                 print(f"INDI RECORD BETWEEN {i} AND {j}")
-                print('ORIGINAL:')
+                print("ORIGINAL:")
 
                 for k in range(i, j):
                     print(f"\t{self.gedcom_lines[k][:-1]}")
@@ -222,7 +225,7 @@ class GedcomParser:
                 assert line.startswith("0")
                 return i
         raise ValueError(f"Could not determine first INDI entry in {self.gedcom_file}")
- 
+
     def get_end_indi(self):
         """Returns the index of the line that begins the last Individual entry in the gedcom file"""
         ret = None
@@ -292,8 +295,6 @@ class GedcomParser:
             raise ValueError(f"Could not determine last INDI entry in {self.gedco_file}")
         else:
             return ret
-
-
 
         for i in range(len(self.gedcom_lines) - 1, -1, -1):
             line = self.gedcom_lines[i]
