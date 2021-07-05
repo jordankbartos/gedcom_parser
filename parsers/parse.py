@@ -13,7 +13,6 @@ from .line import Line
 # in one line are split using CONC
 GEDCOM_MAX_LINE_LENGTH = 80
 
-
 class Entry:
     def __init__(self, lines: List[str]):
         self.lines = lines
@@ -86,13 +85,13 @@ class Entry:
                 num_spaces = 2
 
                 if (
-                    len_depth + len_tag + len_tag_value + num_spaces > 80
+                    len_depth + len_tag + len_tag_value + num_spaces > GEDCOM_MAX_LINE_LENGTH
                     or tag_value.find("<<CONT>>") != -1
                 ):
                     newline_index = tag_value.find("<<CONT>>")
 
                     if newline_index != -1:
-                        if (len_depth + len_tag + num_spaces + newline_index) < 80:
+                        if (len_depth + len_tag + num_spaces + newline_index) < GEDCOM_MAX_LINE_LENGTH:
                             ret = (
                                 True,
                                 "CONT",
@@ -103,15 +102,15 @@ class Entry:
                             ret = (
                                 True,
                                 "CONC",
-                                tag_value[:79 - len_depth - len_tag - num_spaces],
-                                tag_value[79- len_depth - len_tag - num_spaces:],
+                                tag_value[:GEDCOM_MAX_LINE_LENGTH - 1 - len_depth - len_tag - num_spaces],
+                                tag_value[GEDCOM_MAX_LINE_LENGTH - 1- len_depth - len_tag - num_spaces:],
                             )
                     else:
                         ret = (
                             True,
                             "CONC",
-                            tag_value[:80 - len_depth - len_tag - num_spaces],
-                            tag_value[80 - len_depth - len_tag - num_spaces:],
+                            tag_value[:GEDCOM_MAX_LINE_LENGTH - len_depth - len_tag - num_spaces],
+                            tag_value[GEDCOM_MAX_LINE_LENGTH - len_depth - len_tag - num_spaces:],
                         )
                 else:
                     pass
