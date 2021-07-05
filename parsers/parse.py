@@ -1,7 +1,10 @@
 import pandas as pd
 import re
+
 from envparse import env
 from typing import Union, List
+
+from .line import Line
 
 # CONT designates a line break within a record
 # CONC continues a line w/o a line break
@@ -10,116 +13,140 @@ from typing import Union, List
 # in one line are split using CONC
 GEDCOM_MAX_LINE_LENGTH = 80
 
-class Line:
-
-    def __init__(self, line: str):
-        self.line = line
-        self.depth = self.get_depth_from_line(self.line)
-        self.tag = self.get_tag_from_line(self.line)
-        self.tag_value = self.get_tag_value_from_line(self.line)
-
-    @staticmethod
-    def get_depth_from_line(line: str):
-        """Returns the depth value from a gedcom file line.
-
-        E.g. A NAME line may look like '1 NAME Leonard Frank /Bartos/'. Here
-        the depth is 1, meaning this is a first-order property of a base entry.
-
-        E.g. A SURN line may look like '2 GIVN Leonard Frank'. Here the depth is
-        2, meaning this is a second-order property of a base entry (a first-order
-        property of a NAME line, probably).
-        """
-
-        ret = line.split()[0]
-        if not ret.isdigit():
-            raise ValueError(
-                f"Line appears to have an invalid depth value."
-                f"Line should start with an integer. Line={line}"
-            )
-        else:
-            return ret
-
-    @staticmethod
-    def get_tag_from_line(line: str):
-        """Returns the tag name from a gedcom file line. E.g. 'NAME', 'BIRT', 'FAMS'"""
-
-        print(line)
-        line_parts = line.split()
-        if len(line_parts) < 2:
-            raise ValueError(f"Cannot determine tag from line {line}.")
-        else:
-            return line_parts[1]
-
-    @staticmethod
-    def get_tag_value_from_line(line):
-        """Returns the value associated with a line in a gedcom file.
-        If the line has no value, None is returned
-
-        E.g. the line '1 NAME Dorothy Adela /Popp/` returns 'Dorothy Adela /Popp/`
-        E.g. the line '1 BIRT' returns None
-        """
-
-        ret = None
-        if len(line.split()) > 2:
-            ret = " ".join(line.split()[2:])
-        return ret
-
-    @property
-    def line(self):
-        return self._line
-
-    @line.setter
-    def line(self, val):
-        if not isinstance(val, str):
-            raise ValueError(f"invalid line type of {type(val)}")
-        else:
-            self._line = val
-
-    @property
-    def depth(self):
-        return self._depth
-
-    @depth.setter
-    def depth(self, val):
-        print(val)
-        if not isinstance(val, (str, int)):
-            raise ValueError(f"invalid depth type of {type(val)}")
-        else:
-            self._depth = int(val)
-
-    @property
-    def tag(self):
-        return self._tag
-
-    @tag.setter
-    def tag(self, val):
-        if not isinstance(val, str):
-            raise ValueError(f"invalid tag type of {type(val)}")
-        else:
-            self._tag = val
-
-    @property
-    def tag_value(self):
-        return self._tag_value
-
-    @tag_value.setter
-    def tag_value(self, val):
-        if val is not None and not isinstance(val, str):
-            raise ValueError(f"invalid tag_value type of {type(val)}")
-        else:
-            self._tag_value = val
 
 class Entry:
-    def __init__(self):
-        pass
+    def __init__(self, lines: List[str]):
+        self.lines = lines
 
-class IndividualEntry(Entry):
-    def __init__(self):
-        pass
+    @property
+    def lines(self):
+        return self.add_cont_conc(self._lines)
 
-class FamilyEntry(Entry):
-    def __init__(self):
-        pass
+    @lines.setter
+    def lines(self, val):
+        if not isinstance(val, list):
+            raise ValueError(f"lines must be an instance of list, go {type(val)}")
+        elif not all([isinstance(v, str) for v in val]):
+            raise ValueError("All lines must be string values")
+        else:
+            self._lines = self.remove_cont_conc(lines)
+
+    @staticmethod
+    def remove_cont_conc(lines: List[str]) -> List[str]:
+        cont_re = re.compile("^\d+ CONT ")
+        conc_re = re.compile("^\d+ CONC ")
+
+        ret = []
+
+        for i, line in enumerate(lines):
+            # the first two cases should be impossible on the first line
+            if line.endswith("\n"):
+                line = line[:-1]
+            
+            if cont_re.match(line):
+                assert i != 0
+                ret[-1] = f"{ret[-1]}<<CONT>>{cont_re.split(line)[-1]}"
+            elif conc_re.match(line):
+                assert i != 0
+                ret[-1] = f"{ret[-1]}{conc_re.split(line)[-1]}"
+            else:
+                ret.append(line)
+
+        return ret
+
+    @staticmethod
+    def add_cont_conc(lines: List[str]) -> List[str]:
+
+        def get_tag_value_chunk(depth, tag, tag_value):
+            """Helper function to determine when and how to split a tag value
+            Parameters
+            ----------
+            depth: Union[int, str]
+                the depth value for the line being examined
+            tag: str
+                the tag for the line being examined. E.g. DATE, PLAC or BURI
+            tag_value: str
+                the rest of the line being examined
+
+            Returns
+            -------
+            Tuple[bool, str, str, Union[str, None]]
+                [0] - boolean: whether the tag_value needed to be split or not
+                [1] - str: The tag for this line. Original tag, CONC, or CONT 
+                [2] - str: the value of the split-off section of tag_value
+                [3] - str|None: the remainder of tag_value
+            """
+
+            ret = (False, tag, tag_value, None)
+
+            if tag_value is not None:
+                len_depth = len(str(depth))
+                len_tag = len(tag)
+                len_tag_value = len(tag_value)
+                num_spaces = 2
+
+                if (
+                    len_depth + len_tag + len_tag_value + num_spaces > 80
+                    or tag_value.find("<<CONT>>") != -1
+                ):
+                    newline_index = tag_value.find("<<CONT>>")
+
+                    if newline_index != -1:
+                        if (len_depth + len_tag + num_spaces + newline_index) < 80:
+                            ret = (
+                                True,
+                                "CONT",
+                                tag_value.split("<<CONT>>")[0],
+                                "<<CONT>>".join(tag_value.split("<<CONT>>")[1:]),
+                            )
+                        else:
+                            ret = (
+                                True,
+                                "CONC",
+                                tag_value[:79 - len_depth - len_tag - num_spaces],
+                                tag_value[79- len_depth - len_tag - num_spaces:],
+                            )
+                    else:
+                        ret = (
+                            True,
+                            "CONC",
+                            tag_value[:80 - len_depth - len_tag - num_spaces],
+                            tag_value[80 - len_depth - len_tag - num_spaces:],
+                        )
+                else:
+                    pass
+            else:
+                pass
+            return ret
+
+        ret = []
+        for i, line in enumerate(lines):
+
+            depth = int(Line.get_depth_from_line(line))
+            tag = Line.get_tag_from_line(line)
+            tag_value = Line.get_tag_value_from_line(line)
+
+            need_split, new_tag, tag_value, next_tag_value = get_tag_value_chunk(
+                depth, tag, tag_value
+            )
+
+            ret.append(f"{depth} {tag} {tag_value}")
+
+            while need_split:
+                (
+                    need_split,
+                    new_tag,
+                    prev_tag_value,
+                    next_tag_value
+                ) = get_tag_value_chunk(depth + 1, new_tag, next_tag_value)
+
+                if prev_tag_value:
+                    ret.append(f"{depth + 1} {new_tag} {prev_tag_value}")
+                else:
+                    ret.append(f"{depth + 1} {new_tag}")
+
+        return ret
+
 
 class GedcomParser:
     def __init__(self, gedcom_file, family_file, person_file):
@@ -147,10 +174,35 @@ class GedcomParser:
             print(f"\tfirst FAM  index: {start_of_fam_section}")
             print(f"\tlast  FAM  index: {end_of_fam_section}")
 
-        for i in range(start_of_indi_section, start_of_fam_section):
-            if not int(Line.get_depth_from_line(self.gedcom_lines[i])) == 0:
-                l = Line(self.gedcom_lines[i])
-                print("made a line obj!")
+        i = start_of_indi_section
+        while i < start_of_fam_section:
+            j = i + 1
+            while not self.gedcom_lines[j].startswith("0"):
+                j += 1
+
+            if self.PARSER_DEBUG:
+                print('------------------------')
+                print(f"INDI RECORD BETWEEN {i} AND {j}")
+                print('ORIGINAL:')
+
+                for k in range(i, j):
+                    print(f"\t{self.gedcom_lines[k][:-1]}")
+                print("REMOVE_CONT_CONC:")
+
+            ls = Entry.remove_cont_conc(self.gedcom_lines[i:j])
+
+            if self.PARSER_DEBUG:
+                for x in ls:
+                    print(f"\t{x}")
+                print("ADD_CONT_CONC:")
+
+            ls = Entry.add_cont_conc(ls)
+
+            if self.PARSER_DEBUG:
+                for x in ls:
+                    print(f"\t{x}")
+
+            i = j + 1
 
     def csv_to_gedcom(self):
         pass
