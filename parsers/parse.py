@@ -179,19 +179,28 @@ class GedcomParser:
             j = i + 1
             while not self.gedcom_lines[j].startswith("0"):
                 j += 1
-            print('------------------------')
-            print(f"INDI RECORD BETWEEN {i} AND {j}")
-            print('ORIGINAL:')
-            for k in range(i, j):
-                print(f"\t{self.gedcom_lines[k][:-1]}")
-            print("REMOVE_CONT_CONC:")
+
+            if self.PARSER_DEBUG:
+                print('------------------------')
+                print(f"INDI RECORD BETWEEN {i} AND {j}")
+                print('ORIGINAL:')
+
+                for k in range(i, j):
+                    print(f"\t{self.gedcom_lines[k][:-1]}")
+                print("REMOVE_CONT_CONC:")
+
             ls = Entry.remove_cont_conc(self.gedcom_lines[i:j])
-            for x in ls:
-                print(f"\t{x}")
-            print("ADD_CONT_CONC:")
+
+            if self.PARSER_DEBUG:
+                for x in ls:
+                    print(f"\t{x}")
+                print("ADD_CONT_CONC:")
+
             ls = Entry.add_cont_conc(ls)
-            for x in ls:
-                print(f"\t{x}")
+
+            if self.PARSER_DEBUG:
+                for x in ls:
+                    print(f"\t{x}")
 
             i = j + 1
 
