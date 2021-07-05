@@ -1,5 +1,4 @@
 class Line:
-
     def __init__(self, line: str):
         self.line = line
         self.depth = self.get_depth_from_line(self.line)
@@ -94,4 +93,3 @@ class Line:
             raise ValueError(f"invalid tag_value type of {type(val)}")
         else:
             self._tag_value = val
-

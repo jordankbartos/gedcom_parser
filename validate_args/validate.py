@@ -1,5 +1,7 @@
 import os
-def validate_args(direction:str, gedcom_file:str, person_file:str, family_file:str):
+
+
+def validate_args(direction: str, gedcom_file: str, person_file: str, family_file: str):
     """Assert that to_file is not an existing filepath and from_file is an existing filepath"""
     ret = True
     if direction == "GED2CSV":
@@ -25,5 +27,3 @@ def validate_args(direction:str, gedcom_file:str, person_file:str, family_file:s
     else:
         raise ValueError("Invalid direction")
     return ret
-
-
