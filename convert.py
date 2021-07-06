@@ -2,7 +2,6 @@
 import argparse
 import os
 
-from parsers.parse import GedcomParser
 from validate_args.validate import validate_args
 
 
@@ -85,6 +84,9 @@ if __name__ == "__main__":
         print(f"\tperson_file: {person_file}")
         print(f"\tfamily_file: {family_file}")
         print(f"\tgedcome_file: {gedcom_file}")
+
+    # have to wait to import this until after env variables are set conditionally
+    from parsers.parse import GedcomParser
 
     # validate file paths
     if not validate_args(
