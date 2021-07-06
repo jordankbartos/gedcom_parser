@@ -20,8 +20,7 @@ WORKDIR /home/appuser/app
 
 COPY requirements.txt requirements.txt
 ENV PATH="${PATH}:/home/appuser/.local/bin"
-RUN pip3 install -r requirements.txt &&
-    pre-commit install
+RUN pip3 install -r requirements.txt
 WORKDIR /home/appuser
 
 RUN git clone https://github.com/jordankbartos/my_config.git \
@@ -33,5 +32,8 @@ RUN git clone https://github.com/jordankbartos/my_config.git \
 WORKDIR /home/appuser/app
 
 COPY --chown=appuser . .
+RUN pre-commit install \
+    && git config user.email "jordankbartos@gmail.com" \
+    && git config user.name "Jordan Bartos"
 
 CMD ["bash"]
