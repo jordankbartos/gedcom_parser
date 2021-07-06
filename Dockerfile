@@ -20,7 +20,8 @@ WORKDIR /home/appuser/app
 
 COPY requirements.txt requirements.txt
 ENV PATH="${PATH}:/home/appuser/.local/bin"
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt &&
+    pre-commit install
 WORKDIR /home/appuser
 
 RUN git clone https://github.com/jordankbartos/my_config.git \
