@@ -29,7 +29,7 @@ class Entry:
     def get_type_from_line(line):
         assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
         return line.split()[2]
-        
+
     @staticmethod
     def get_id_from_line(line):
         assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
@@ -209,14 +209,14 @@ class Entry:
             "_UID": "4EF44217DF0F40419968D80B5CC5FE8491FB",
         }
         """
-        
+
         ret = {"id": self.id, "tag_type": self.type}
 
         active_tags = []
         for i, line in enumerate(self._lines):
 
             if line.depth <= len(active_tags) + 1:
-                active_tags = active_tags[:line.depth - 1]
+                active_tags = active_tags[: line.depth - 1]
             active_tags.append(line.tag)
 
             if line.tag_value is None:
