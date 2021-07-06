@@ -17,12 +17,27 @@ PARSER_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
 
 
 class Entry:
+    """Class to manage an entry. Where an entry is an entire INDI, FAM, or SOUR entry in a gedcom file"""
+
     def __init__(self, lines: List[str]):
-        self.lines = lines
+        # the first line is not like the others. It contians the type of entry, and the id number
+        self.type = self.get_type_from_line(lines[0])
+        self.id = self.get_id_from_line(lines[0])
+        self.lines = lines[1:]
+
+    @staticmethod
+    def get_type_from_line(line):
+        assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
+        return line.split()[2]
+        
+    @staticmethod
+    def get_id_from_line(line):
+        assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
+        return line.split()[1]
 
     @property
     def lines(self):
-        return self.add_cont_conc(self._lines)
+        return self.add_cont_conc([l.to_str() for l in self._lines])
 
     @lines.setter
     def lines(self, val):
@@ -31,10 +46,11 @@ class Entry:
         elif not all([isinstance(v, str) for v in val]):
             raise ValueError("All lines must be string values")
         else:
-            self._lines = self.remove_cont_conc(val)
+            self._lines = [Line.from_str(l) for l in self.remove_cont_conc(val)]
 
     @staticmethod
     def remove_cont_conc(lines: List[str]) -> List[str]:
+        """Removes CONT and CONC tags in a list of lines by combining those lines into one line"""
 
         cont_re = re.compile("^\d+ CONT ")
         conc_re = re.compile("^\d+ CONC ")
@@ -193,10 +209,29 @@ class Entry:
             "_UID": "4EF44217DF0F40419968D80B5CC5FE8491FB",
         }
         """
-        for line in self._lines:
-            if line.startswith("0"):
-                pass
-                # begin a new set of column headers
+        
+        ret = {"id": self.id, "tag_type": self.type}
+
+        active_tags = []
+        for i, line in enumerate(self._lines):
+
+            if line.depth <= len(active_tags) + 1:
+                active_tags = active_tags[:line.depth - 1]
+            active_tags.append(line.tag)
+
+            if line.tag_value is None:
+                tag_value = "<<NONE>>"
+            else:
+                tag_value = line.tag_value
+
+            ret["+".join(active_tags)] = tag_value
+
+        if ENTRY_DEBUG:
+            print("--ENTRY AS DICT--")
+            for k, v in ret.items():
+                print(f"\t{k}: {v}")
+
+        return ret
 
 
 class GedcomParser:
@@ -244,8 +279,8 @@ class GedcomParser:
                 for k in range(i, j):
                     print(f"\t{self.gedcom_lines[k][:-1]}")
 
-            print("i:", i, "j:", j)
             self.indi_entries.append(Entry(lines=self.gedcom_lines[i:j]))
+            x = self.indi_entries[-1].to_col_name_dict()
 
             i = j
 

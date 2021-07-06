@@ -1,9 +1,21 @@
 class Line:
-    def __init__(self, line: str):
-        self.line = line
-        self.depth = self.get_depth_from_line(self.line)
-        self.tag = self.get_tag_from_line(self.line)
-        self.tag_value = self.get_tag_value_from_line(self.line)
+    def __init__(self, depth, tag, tag_value):
+        self.depth = depth
+        self.tag = tag
+        self.tag_value = tag_value
+
+    @classmethod
+    def from_str(cls, line):
+        depth = cls.get_depth_from_line(line)
+        tag = cls.get_tag_from_line(line)
+        tag_value = cls.get_tag_value_from_line(line)
+
+        return cls(depth=depth, tag=tag, tag_value=tag_value)
+
+    def to_str(self):
+        ret = f"{self.depth} {self.tag}"
+        if self.tag_value is not None:
+            ret = f"{ret} {self.tag_value}"
 
     @staticmethod
     def get_depth_from_line(line: str):
@@ -37,7 +49,7 @@ class Line:
             return line_parts[1]
 
     @staticmethod
-    def get_tag_value_from_line(line):
+    def get_tag_value_from_line(line: str):
         """Returns the value associated with a line in a gedcom file.
         If the line has no value, None is returned
 
