@@ -64,7 +64,11 @@ class Entry:
 
             if cont_re.match(line):
                 assert i != 0
-                ret[-1] = f"{ret[-1]}<<CONT>>{cont_re.split(line)[-1]}"
+                # if ret[-1] is nothing but a depth and tag, there needs to be a space before the CONT
+                if re.match(r"^\d+ \w{3,4}$", ret[-1]):
+                    ret[-1] = f"{ret[-1]} <<CONT>>{cont_re.split(line)[-1]}"
+                else:
+                    ret[-1] = f"{ret[-1]}<<CONT>>{cont_re.split(line)[-1]}"
             elif conc_re.match(line):
                 assert i != 0
                 ret[-1] = f"{ret[-1]}{conc_re.split(line)[-1]}"
@@ -224,6 +228,11 @@ class Entry:
             else:
                 tag_value = line.tag_value
 
+            suffix = 0
+            while "+".join(active_tags) in ret:
+                suffix += 1
+                active_tags[-1] = f"{line.tag}_{suffix}"
+
             ret["+".join(active_tags)] = tag_value
 
         if ENTRY_DEBUG:
@@ -280,8 +289,6 @@ class GedcomParser:
                     print(f"\t{self.gedcom_lines[k][:-1]}")
 
             self.indi_entries.append(Entry(lines=self.gedcom_lines[i:j]))
-            x = self.indi_entries[-1].to_col_name_dict()
-
             i = j
 
         self.fam_entries = []
@@ -304,8 +311,15 @@ class GedcomParser:
                 for k in range(i, j):
                     print(f"\t{self.gedcom_lines[k][:-1]}")
             self.fam_entries.append(Entry(lines=self.gedcom_lines[i:j]))
-
             i = j
+
+        self.indi_dicts = [i.to_col_name_dict() for i in self.indi_entries]
+        self.indi_df = pd.DataFrame(self.indi_dicts)
+        self.indi_csv_str = self.indi_df.to_csv()
+
+        self.fam_dicts = [f.to_col_name_dict() for f in self.fam_entries]
+        self.fam_df = pd.DataFrame(self.fam_dicts)
+        self.fam_csv_str = self.fam_df.to_csv()
 
     def csv_to_gedcom(self):
         pass
