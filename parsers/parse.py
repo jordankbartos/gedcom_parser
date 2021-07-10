@@ -19,10 +19,21 @@ PARSER_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
 class Entry:
     """Class to manage an entry. Where an entry is an entire INDI, FAM, or SOUR entry in a gedcom file"""
 
-    def __init__(self, lines: List[str]):
+    def __init__(self, lines: List[str], force_string_dates, no_cont_conc):
         # the first line is not like the others. It contians the type of entry, and the id number
         self.type = self.get_type_from_line(lines[0])
         self.id = self.get_id_from_line(lines[0])
+        self.force_string_dates = force_string_dates
+        self.no_cont_conc = no_cont_conc
+
+        self.empty_line_placeholder = "<<NONE>>"
+        self.cont_placeholder = "<<CONT>>"
+        self.missing_data_placeholder = "<<MISSING DATA>>"
+
+        self.cont_re = re.compile("^\d+ CONT ")
+        self.conc_re = re.compile("^\d+ CONC ")
+        self.empty_line_re = re.compile(r"^\d+ \w{3,4}$")
+
         self.lines = lines[1:]
 
     @staticmethod
@@ -46,14 +57,51 @@ class Entry:
         elif not all([isinstance(v, str) for v in val]):
             raise ValueError("All lines must be string values")
         else:
-            self._lines = [Line.from_str(l) for l in self.remove_cont_conc(val)]
+            if self.no_cont_conc:
+                self._lines = [Line.from_str(l) for l in self.remove_cont_conc(val)]
+            else:
+                self._lines = [Line.from_str(l) for l in self.collapse_cont_conc(val)]
 
-    @staticmethod
-    def remove_cont_conc(lines: List[str]) -> List[str]:
+    def remove_cont_conc(self, lines: List[str]) -> List[str]:
+
+        ret = []
+        skip = False
+
+        for i, line in enumerate(lines):
+            if line.endswith("\n"):
+                line = line[:-1]
+
+            if self.cont_re.match(line) or self.conc_re.match(line):
+                assert i > 0
+
+                # don't do this repeatedly for consecutive CONTs or CONCs
+                if skip:
+                    pass
+                else:
+                    prev_line = ret[-1]
+
+                    skip = True
+                    if len(prev_line) > GEDCOM_MAX_LINE_LENGTH - len(self.missing_data_placeholder):
+                        ret[
+                            -1
+                        ] = f"{ret[-1][:GEDCOM_MAX_LINE_LENGTH - len(self.missing_data_placeholder)]}{self.missing_data_placeholder}"
+                    else:
+                        if self.empty_line_re.match(ret[-1]):
+                            ret[-1] = f"{ret[-1]} {self.missing_data_placeholder}"
+                        else:
+                            ret[-1] = f"{ret[-1]}{self.missing_data_placeholder}"
+            else:
+                skip = False
+                ret.append(line)
+
+        if ENTRY_DEBUG:
+            print("REMOVE_CONT_CONC results:")
+            for x in ret:
+                print(f"\t{x}")
+        return ret
+
+    def collapse_cont_conc(self, lines: List[str]) -> List[str]:
         """Removes CONT and CONC tags in a list of lines by combining those lines into one line"""
-
-        cont_re = re.compile("^\d+ CONT ")
-        conc_re = re.compile("^\d+ CONC ")
 
         ret = []
 
@@ -62,21 +110,21 @@ class Entry:
             if line.endswith("\n"):
                 line = line[:-1]
 
-            if cont_re.match(line):
+            if self.cont_re.match(line):
                 assert i != 0
                 # if ret[-1] is nothing but a depth and tag, there needs to be a space before the CONT
-                if re.match(r"^\d+ \w{3,4}$", ret[-1]):
-                    ret[-1] = f"{ret[-1]} <<CONT>>{cont_re.split(line)[-1]}"
+                if self.empty_line_re.match(ret[-1]):
+                    ret[-1] = f"{ret[-1]} {self.cont_placeholder}{self.cont_re.split(line)[-1]}"
                 else:
-                    ret[-1] = f"{ret[-1]}<<CONT>>{cont_re.split(line)[-1]}"
-            elif conc_re.match(line):
+                    ret[-1] = f"{ret[-1]}{self.cont_placeholder}{self.cont_re.split(line)[-1]}"
+            elif self.conc_re.match(line):
                 assert i != 0
-                ret[-1] = f"{ret[-1]}{conc_re.split(line)[-1]}"
+                ret[-1] = f"{ret[-1]}{self.conc_re.split(line)[-1]}"
             else:
                 ret.append(line)
 
         if ENTRY_DEBUG:
-            print("REMOVE_CONT_CONC results:")
+            print("COLLAPSE_CONT_CONC results:")
             for x in ret:
                 print(f"\t{x}")
 
@@ -114,9 +162,9 @@ class Entry:
 
                 if (
                     len_depth + len_tag + len_tag_value + num_spaces > GEDCOM_MAX_LINE_LENGTH
-                    or tag_value.find("<<CONT>>") != -1
+                    or tag_value.find(self.cont_placeholder) != -1
                 ):
-                    newline_index = tag_value.find("<<CONT>>")
+                    newline_index = tag_value.find(self.cont_placeholder)
 
                     if newline_index != -1:
                         if (
@@ -125,8 +173,10 @@ class Entry:
                             ret = (
                                 True,
                                 "CONT",
-                                tag_value.split("<<CONT>>")[0],
-                                "<<CONT>>".join(tag_value.split("<<CONT>>")[1:]),
+                                tag_value.split(self.cont_placeholder)[0],
+                                self.cont_placeholder.join(
+                                    tag_value.split(self.cont_placeholder)[1:]
+                                ),
                             )
                         else:
                             ret = (
@@ -224,9 +274,12 @@ class Entry:
             active_tags.append(line.tag)
 
             if line.tag_value is None:
-                tag_value = "<<NONE>>"
+                tag_value = self.empty_line_placeholder
             else:
-                tag_value = line.tag_value
+                if self.force_string_dates and line.tag == "DATE":
+                    tag_value = f"'{line.tag_value}"
+                else:
+                    tag_value = line.tag_value
 
             suffix = 0
             while "+".join(active_tags) in ret:
@@ -244,10 +297,20 @@ class Entry:
 
 
 class GedcomParser:
-    def __init__(self, gedcom_file, family_file, person_file):
+    def __init__(
+        self,
+        gedcom_file,
+        family_file,
+        person_file,
+        no_cont_conc,
+        force_string_dates,
+    ):
         self.gedcom_file = gedcom_file
         self.family_file = family_file
         self.person_file = person_file
+        self.no_cont_conc = no_cont_conc
+        self.force_string_dates = force_string_dates
+
         self.indi_regex = re.compile(r"^\d+ @I\d+@ INDI$")
         self.fam_regex = re.compile(r"^\d+ @F\d+@ FAM$")
 
@@ -288,7 +351,13 @@ class GedcomParser:
                 for k in range(i, j):
                     print(f"\t{self.gedcom_lines[k][:-1]}")
 
-            self.indi_entries.append(Entry(lines=self.gedcom_lines[i:j]))
+            self.indi_entries.append(
+                Entry(
+                    lines=self.gedcom_lines[i:j],
+                    force_string_dates=self.force_string_dates,
+                    no_cont_conc=self.no_cont_conc,
+                )
+            )
             i = j
 
         self.fam_entries = []
@@ -310,7 +379,13 @@ class GedcomParser:
                 print(f"FAM RECORD LINES {i}-{j}:")
                 for k in range(i, j):
                     print(f"\t{self.gedcom_lines[k][:-1]}")
-            self.fam_entries.append(Entry(lines=self.gedcom_lines[i:j]))
+            self.fam_entries.append(
+                Entry(
+                    lines=self.gedcom_lines[i:j],
+                    force_string_dates=self.force_string_dates,
+                    no_cont_conc=self.no_cont_conc,
+                )
+            )
             i = j
 
         self.indi_dicts = [i.to_col_name_dict() for i in self.indi_entries]
