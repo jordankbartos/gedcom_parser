@@ -16,6 +16,7 @@ class Line:
         ret = f"{self.depth} {self.tag}"
         if self.tag_value is not None:
             ret = f"{ret} {self.tag_value}"
+        return ret
 
     @staticmethod
     def get_depth_from_line(line: str):
