@@ -299,13 +299,13 @@ class Entry:
 class GedcomParser:
     def __init__(
         self,
-        gedcom_file,
-        family_file,
-        person_file,
+        gedcom_str,
+        family_csv_str,
+        person_csv_str,
         no_cont_conc,
         force_string_dates,
     ):
-        self.gedcom_file = gedcom_file
+        self.gedcom_str = gedcom_str
         self.family_file = family_file
         self.person_file = person_file
         self.no_cont_conc = no_cont_conc
@@ -316,7 +316,7 @@ class GedcomParser:
 
     def gedcom_to_csv(self):
         # open the file and read lines
-        self.gedcom_lines = self.get_gedcom_lines()
+        self.gedcom_lines = self.get_gedcom_str.split("\n")
 
         # Find the start and stop for the indi and family sections
         start_of_indi_section = self.get_start_indi()
@@ -396,17 +396,16 @@ class GedcomParser:
         self.fam_df = pd.DataFrame(self.fam_dicts)
         self.fam_csv_str = self.fam_df.to_csv()
 
+        return {
+            "INDI": self.ind_csv_str,
+            "FAM": self.fam_csv_str,
+        }
+
     def csv_to_gedcom(self):
         pass
 
     def handle_tag(self):
         pass
-
-    def get_gedcom_lines(self):
-        with open(self.gedcom_file, "r") as f:
-            lines = f.readlines()
-        assert len(lines) > 0
-        return lines
 
     def get_start_indi(self):
         """Returns the index of the line that begins the first Individual entry in the gedcom file"""
@@ -414,7 +413,7 @@ class GedcomParser:
             if self.indi_regex.match(line):
                 assert line.startswith("0")
                 return i
-        raise ValueError(f"Could not determine first INDI entry in {self.gedcom_file}")
+        raise ValueError(f"Could not determine first INDI entry in gedcom file")
 
     def get_end_indi(self):
         """Returns the index of the line that begins the last Individual entry in the gedcom file"""
@@ -453,7 +452,7 @@ class GedcomParser:
             if self.fam_regex.match(line):
                 assert line.startswith("0")
                 return i
-        raise ValueError(f"Could not determine first FAM entry in {self.gedcom_file}")
+        raise ValueError(f"Could not determine first FAM entry in gedcom file")
 
     def get_end_fam(self):
         """Returns the index of the line that begins the last Family entry in the gedcom file"""
