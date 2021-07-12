@@ -31,9 +31,9 @@ RUN git clone https://github.com/jordankbartos/my_config.git \
 
 WORKDIR /home/appuser/app
 
-COPY --chown=appuser . .
-RUN pre-commit install \
-    && git config user.email "jordankbartos@gmail.com" \
-    && git config user.name "Jordan Bartos"
+# COPY --chown=appuser . .
+#RUN git config user.email --global "jordankbartos@gmail.com" \
+#    && git config user.name --global "Jordan Bartos" \
+    # && pre-commit install \
 
 CMD ["bash"]
