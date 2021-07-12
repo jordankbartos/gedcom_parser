@@ -49,20 +49,45 @@ if __name__ == "__main__":
     elif verbose:
         print("Validation succeeded")
 
-    parser = GedcomParser(
-        gedcom_lines=gedcom_file,
-        person_file=person_file,
-        family_file=family_file,
-        no_cont_conc=no_cont_conc,
-        force_string_dates=force_string_dates,
-    )
-
     if direction == "GED2CSV":
+
+        with open(gedcom_file, "r") as f:
+            gedcom_str = f.read()
+
+        parser = GedcomParser(
+            gedcom_str=gedcom_str,
+            person_csv_str=None,
+            family_csv_str=None,
+            no_cont_conc=no_cont_conc,
+            force_string_dates=force_string_dates,
+        )
+
         if verbose:
             print(f"Converting {gedcom_file} to CSV...")
-        out_str = parser.gedcom_to_csv()
+        parts = parser.gedcom_to_csv()
+
+        with open(person_file, "w") as f:
+            f.write(parts["INDI"])
+
+        with open(family_file, "w") as f:
+            f.write(parts["FAM"])
 
     elif direction == "CSV2GED":
+
+        with open(person_file, "r") as f:
+            person_str = f.read()
+
+        with open(family_file, "r") as f:
+            family_str = f.read()
+
+        parser = GedcomParser(
+            gedcom_str=None,
+            person_csv_str=None,
+            family_csv_str=None,
+            no_cont_conc=no_cont_conc,
+            force_string_dates=force_string_dates,
+        )
+
         if verbose:
             print(f"Converting {person_file} and {family_file} to GEDCOM...")
         out_str = parser.csv_to_gedcom()

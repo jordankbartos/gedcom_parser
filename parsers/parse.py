@@ -306,8 +306,9 @@ class GedcomParser:
         force_string_dates,
     ):
         self.gedcom_str = gedcom_str
-        self.family_file = family_file
-        self.person_file = person_file
+        self.family_csv_str = family_csv_str
+        self.person_csv_str = person_csv_str
+
         self.no_cont_conc = no_cont_conc
         self.force_string_dates = force_string_dates
 
@@ -316,7 +317,7 @@ class GedcomParser:
 
     def gedcom_to_csv(self):
         # open the file and read lines
-        self.gedcom_lines = self.get_gedcom_str.split("\n")
+        self.gedcom_lines = self.gedcom_str.split("\n")
 
         # Find the start and stop for the indi and family sections
         start_of_indi_section = self.get_start_indi()
@@ -397,7 +398,7 @@ class GedcomParser:
         self.fam_csv_str = self.fam_df.to_csv()
 
         return {
-            "INDI": self.ind_csv_str,
+            "INDI": self.indi_csv_str,
             "FAM": self.fam_csv_str,
         }
 
