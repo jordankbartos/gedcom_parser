@@ -1,19 +1,118 @@
-import pandas as pd
 import re
-
 from envparse import env
 from typing import Union, List
 
-from .line import Line
-
-# CONT designates a line break within a record
-# CONC continues a line w/o a line break
-
-# sets the line length limit for an entry when CREATING a gedcom file. Entries too long to fit
-# in one line are split using CONC
-GEDCOM_MAX_LINE_LENGTH = 80
 ENTRY_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
-PARSER_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
+
+
+class Line:
+    def __init__(self, depth, tag, tag_value):
+        self.depth = depth
+        self.tag = tag
+        self.tag_value = tag_value
+
+    @classmethod
+    def from_str(cls, line):
+        depth = cls.get_depth_from_line(line)
+        tag = cls.get_tag_from_line(line)
+        tag_value = cls.get_tag_value_from_line(line)
+
+        return cls(depth=depth, tag=tag, tag_value=tag_value)
+
+    def to_str(self):
+        ret = f"{self.depth} {self.tag}"
+        if self.tag_value is not None:
+            ret = f"{ret} {self.tag_value}"
+        return ret
+
+    @staticmethod
+    def get_depth_from_line(line: str):
+        """Returns the depth value from a gedcom file line.
+
+        E.g. A NAME line may look like '1 NAME Leonard Frank /Bartos/'. Here
+        the depth is 1, meaning this is a first-order property of a base entry.
+
+        E.g. A SURN line may look like '2 GIVN Leonard Frank'. Here the depth is
+        2, meaning this is a second-order property of a base entry (a first-order
+        property of a NAME line, probably).
+        """
+
+        ret = line.split()[0]
+        if not ret.isdigit():
+            raise ValueError(
+                f"Line appears to have an invalid depth value."
+                f"Line should start with an integer. Line={line}"
+            )
+        else:
+            return ret
+
+    @staticmethod
+    def get_tag_from_line(line: str):
+        """Returns the tag name from a gedcom file line. E.g. 'NAME', 'BIRT', 'FAMS'"""
+
+        line_parts = line.split()
+        if len(line_parts) < 2:
+            raise ValueError(f"Cannot determine tag from line {line}.")
+        else:
+            return line_parts[1]
+
+    @staticmethod
+    def get_tag_value_from_line(line: str):
+        """Returns the value associated with a line in a gedcom file.
+        If the line has no value, None is returned
+
+        E.g. the line '1 NAME Dorothy Adela /Popp/` returns 'Dorothy Adela /Popp/`
+        E.g. the line '1 BIRT' returns None
+        """
+
+        ret = None
+        if len(line.split()) > 2:
+            ret = " ".join(line.split()[2:])
+        return ret
+
+    @property
+    def line(self):
+        return self._line
+
+    @line.setter
+    def line(self, val):
+        if not isinstance(val, str):
+            raise ValueError(f"invalid line type of {type(val)}")
+        else:
+            self._line = val
+
+    @property
+    def depth(self):
+        return self._depth
+
+    @depth.setter
+    def depth(self, val):
+        if not isinstance(val, (str, int)):
+            raise ValueError(f"invalid depth type of {type(val)}")
+        else:
+            self._depth = int(val)
+
+    @property
+    def tag(self):
+        return self._tag
+
+    @tag.setter
+    def tag(self, val):
+        if not isinstance(val, str):
+            raise ValueError(f"invalid tag type of {type(val)}")
+        else:
+            self._tag = val
+
+    @property
+    def tag_value(self):
+        return self._tag_value
+
+    @tag_value.setter
+    def tag_value(self, val):
+        if val is not None and not isinstance(val, str):
+            raise ValueError(f"invalid tag_value type of {type(val)}")
+        else:
+            self._tag_value = val
 
 
 class Entry:
@@ -38,12 +137,14 @@ class Entry:
 
     @staticmethod
     def get_type_from_line(line):
-        assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
+        if ENTRY_DEBUG:
+            assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
         return line.split()[2]
 
     @staticmethod
     def get_id_from_line(line):
-        assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
+        if ENTRY_DEBUG:
+            assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
         return line.split()[1]
 
     @property
@@ -132,7 +233,7 @@ class Entry:
 
     @staticmethod
     def add_cont_conc(lines: List[str]) -> List[str]:
-        def get_tag_value_chunk(depth, tag, tag_value):
+        def get_tag_value_chunk(depth: Union[int, str], tag: str, tag_value: str):
             """Helper function to determine when and how to split a tag value
             Parameters
             ----------
@@ -294,201 +395,3 @@ class Entry:
                 print(f"\t{k}: {v}")
 
         return ret
-
-
-class GedcomParser:
-    def __init__(
-        self,
-        gedcom_str,
-        family_csv_str,
-        person_csv_str,
-        no_cont_conc,
-        force_string_dates,
-    ):
-        self.gedcom_str = gedcom_str
-        self.family_csv_str = family_csv_str
-        self.person_csv_str = person_csv_str
-
-        self.no_cont_conc = no_cont_conc
-        self.force_string_dates = force_string_dates
-
-        self.indi_regex = re.compile(r"^\d+ @I\d+@ INDI$")
-        self.fam_regex = re.compile(r"^\d+ @F\d+@ FAM$")
-
-    def gedcom_to_csv(self):
-        # open the file and read lines
-        self.gedcom_lines = self.gedcom_str.split("\n")
-
-        # Find the start and stop for the indi and family sections
-        start_of_indi_section = self.get_start_indi()
-        end_of_indi_section = self.get_end_indi()
-        start_of_fam_section = self.get_start_fam()
-        end_of_fam_section = self.get_end_fam()
-
-        if PARSER_DEBUG:
-            print("--Determined these indexes for INDI and FAM sections--")
-            print(f"\tfirst INDI index: {start_of_indi_section}")
-            print(f"\tlast  INDI index: {end_of_indi_section}")
-            print(f"\tfirst FAM  index: {start_of_fam_section}")
-            print(f"\tlast  FAM  index: {end_of_fam_section}")
-
-        self.indi_entries = []
-        i = start_of_indi_section
-        while i < start_of_fam_section:
-            j = i + 1
-            while j < len(self.gedcom_lines) and not self.gedcom_lines[j].startswith("0"):
-                j += 1
-
-            # Make sure everything is looking ok
-            assert i < j
-            assert i >= start_of_indi_section
-            assert j <= start_of_fam_section
-            assert self.gedcom_lines[i].startswith("0")
-            assert self.gedcom_lines[j].startswith("0")
-
-            if PARSER_DEBUG:
-                print("------------------------")
-                print(f"INDI RECORD LINES {i}-{j}:")
-                for k in range(i, j):
-                    print(f"\t{self.gedcom_lines[k][:-1]}")
-
-            self.indi_entries.append(
-                Entry(
-                    lines=self.gedcom_lines[i:j],
-                    force_string_dates=self.force_string_dates,
-                    no_cont_conc=self.no_cont_conc,
-                )
-            )
-            i = j
-
-        self.fam_entries = []
-        i = start_of_fam_section
-        while i < end_of_fam_section + 1:
-            j = i + 1
-            while j < len(self.gedcom_lines) and not self.gedcom_lines[j].startswith("0"):
-                j += 1
-
-            # Make sure everything is looking ok
-            assert i < j
-            assert i >= start_of_fam_section
-            assert j <= end_of_fam_section + 1
-            assert self.gedcom_lines[i].startswith("0")
-            assert self.gedcom_lines[j].startswith("0")
-
-            if PARSER_DEBUG:
-                print("------------------------")
-                print(f"FAM RECORD LINES {i}-{j}:")
-                for k in range(i, j):
-                    print(f"\t{self.gedcom_lines[k][:-1]}")
-            self.fam_entries.append(
-                Entry(
-                    lines=self.gedcom_lines[i:j],
-                    force_string_dates=self.force_string_dates,
-                    no_cont_conc=self.no_cont_conc,
-                )
-            )
-            i = j
-
-        self.indi_dicts = [i.to_col_name_dict() for i in self.indi_entries]
-        self.indi_df = pd.DataFrame(self.indi_dicts)
-        self.indi_csv_str = self.indi_df.to_csv()
-
-        self.fam_dicts = [f.to_col_name_dict() for f in self.fam_entries]
-        self.fam_df = pd.DataFrame(self.fam_dicts)
-        self.fam_csv_str = self.fam_df.to_csv()
-
-        return {
-            "INDI": self.indi_csv_str,
-            "FAM": self.fam_csv_str,
-        }
-
-    def csv_to_gedcom(self):
-        pass
-
-    def handle_tag(self):
-        pass
-
-    def get_start_indi(self):
-        """Returns the index of the line that begins the first Individual entry in the gedcom file"""
-        for i, line in enumerate(self.gedcom_lines):
-            if self.indi_regex.match(line):
-                assert line.startswith("0")
-                return i
-        raise ValueError(f"Could not determine first INDI entry in gedcom file")
-
-    def get_end_indi(self):
-        """Returns the index of the line that begins the last Individual entry in the gedcom file"""
-        ret = None
-
-        i = len(self.gedcom_lines) - 1
-        end_indi_found = False
-        # start from the end of the gedcom file and work backwards searching for the last
-        # INDI entry
-        while i > 0 and not end_indi_found:
-
-            line = self.gedcom_lines[i]
-            if self.indi_regex.match(line):
-                assert line.startswith("0")
-
-                # found the last indi entry
-                end_indi_found = True
-                i += 1
-                line = self.gedcom_lines[i]
-
-                # Now start working back forwards to find the end of this indi entry
-                while i < len(self.gedcom_lines) and not line.startswith("0"):
-                    i += 1
-                    line = self.gedcom_lines[i]
-                    if line.startswith("0"):
-                        ret = i - 1
-            i -= 1
-        if ret is None:
-            raise ValueError(f"Could not determine last INDI entry in {self.gedco_file}")
-        else:
-            return ret
-
-    def get_start_fam(self):
-        """Returns the index of the line that begins the first Family entry in the gedcom file"""
-        for i, line in enumerate(self.gedcom_lines):
-            if self.fam_regex.match(line):
-                assert line.startswith("0")
-                return i
-        raise ValueError(f"Could not determine first FAM entry in gedcom file")
-
-    def get_end_fam(self):
-        """Returns the index of the line that begins the last Family entry in the gedcom file"""
-        ret = None
-
-        i = len(self.gedcom_lines) - 1
-        end_fam_found = False
-        # start from the end of the gedcom file and work backwards searching for the last
-        # INDI entry
-        while i > 0 and not end_fam_found:
-
-            line = self.gedcom_lines[i]
-            if self.fam_regex.match(line):
-                assert line.startswith("0")
-
-                # found the last fam entry
-                end_fam_found = True
-                i += 1
-                line = self.gedcom_lines[i]
-
-                # Now start working back forwards to find the end of this fam entry
-                while i < len(self.gedcom_lines) and not line.startswith("0"):
-                    i += 1
-                    line = self.gedcom_lines[i]
-                    if line.startswith("0"):
-                        ret = i - 1
-            i -= 1
-        if ret is None:
-            raise ValueError(f"Could not determine last INDI entry in {self.gedco_file}")
-        else:
-            return ret
-
-        for i in range(len(self.gedcom_lines) - 1, -1, -1):
-            line = self.gedcom_lines[i]
-            if self.fam_regex.match(line):
-                assert line.startswith("0")
-                return i
-        raise ValueError(f"Could not determine last INDI entry in {self.gedco_file}")
