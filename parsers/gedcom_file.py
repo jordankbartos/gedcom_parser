@@ -73,15 +73,31 @@ class GedcomFile:
 
         if PARSER_DEBUG:
             print("==============PROCESSING INDI ENTRIES================")
-        self.entries["INDI"] = self.get_section_entries(start_of_indi_section, end_of_indi_section)
+            assert (start_of_indi_section is None and end_of_indi_section is None) or (
+                start_of_indi_section is not None and end_of_indi_section is not None
+            )
+        if start_of_indi_section is not None and end_of_indi_section is not None:
+            self.entries["INDI"] = self.get_section_entries(
+                start_of_indi_section, end_of_indi_section
+            )
 
         if PARSER_DEBUG:
             print("==============PROCESSING FAM ENTRIES=================")
-        self.entries["FAM"] = self.get_section_entries(start_of_fam_section, end_of_fam_section)
+            assert (start_of_fam_section is None and end_of_fam_section is None) or (
+                start_of_fam_section is not None and end_of_fam_section is not None
+            )
+        if start_of_fam_section is not None and end_of_fam_section is not None:
+            self.entries["FAM"] = self.get_section_entries(start_of_fam_section, end_of_fam_section)
 
         if PARSER_DEBUG:
             print("==============PROCESSING SOUR ENTRIES================")
-        self.entries["SOUR"] = self.get_section_entries(start_of_sour_section, end_of_sour_section)
+            assert (start_of_sour_section is None and end_of_sour_section is None) or (
+                start_of_sour_section is not None and end_of_sour_section is not None
+            )
+        if start_of_sour_section is not None and end_of_sour_section is not None:
+            self.entries["SOUR"] = self.get_section_entries(
+                start_of_sour_section, end_of_sour_section
+            )
 
         self.indi_dicts = [i.to_col_name_dict() for i in self.entries["INDI"]]
         self.fam_dicts = [f.to_col_name_dict() for f in self.entries["FAM"]]
@@ -177,22 +193,19 @@ class GedcomFile:
         # INDI entry
         while i > 0 and not end_found:
 
-            line = self.gedcom_lines[i]
-            if pattern.match(line):
+            if pattern.match(self.gedcom_lines[i]):
 
                 if PARSER_DEBUG:
-                    assert line.startswith("0")
+                    assert self.gedcom_lines[i].startswith("0")
 
                 # found the last indi entry
                 end_found = True
                 i += 1
-                line = self.gedcom_lines[i]
 
                 # Now start working back forwards to find the end of this indi entry
-                while i < len(self.gedcom_lines) and not line.startswith("0"):
+                while i < len(self.gedcom_lines) and not self.gedcom_lines[i].startswith("0"):
                     i += 1
-                    line = self.gedcom_lines[i]
-                    if line.startswith("0"):
+                    if self.gedcom_lines[i].startswith("0"):
                         # i is now set to the index of the line after the end of the last entry. So
                         # subtract one to get back to the last line of the previous entry
                         ret = i - 1
