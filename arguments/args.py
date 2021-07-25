@@ -7,6 +7,7 @@ def validate_args(
     gedcom_file: str,
     person_file: str,
     family_file: str,
+    source_file: str,
     no_cont_conc: bool,
     force_string_dates: bool,
 ):
@@ -19,11 +20,15 @@ def validate_args(
             ret.append("Invalid person file. File already exists! I will not over-write a file!")
         if os.path.exists(family_file):
             ret.append("Invalid family file. File already exists! I will not over-write a file!")
+        if os.path.exists(source_file):
+            ret.append("Invalid source file. File already exists! I will not over-write a file!")
     elif direction == "CSV2GED":
         if not os.path.exists(person_file):
             ret.append("Invalid person file. File does not exist")
         if not os.path.exists(family_file):
             ret.append("Invalid family file. File does not exist")
+        if not os.path.exists(source_file):
+            ret.append("Invalid source file. File does not exist")
         if os.path.exists(gedcom_file):
             ret.append("Invalid gedcom file. File already exists! I will not over-write a file!")
         if no_cont_conc:
@@ -75,7 +80,7 @@ def parse_args():
     p.add_argument(
         "-f",
         "--family-file",
-        help="File path to the familycsv file to be read or generated",
+        help="File path to the family csv file to be read or generated",
         action="store",
         nargs=1,
         type=str,
@@ -83,6 +88,16 @@ def parse_args():
         dest="family_file",
     )
 
+    p.add_argument(
+        "-s",
+        "--source-file",
+        help="File path to the source csv file to be read or generated",
+        action="store",
+        nargs=1,
+        type=str,
+        required=True,
+        dest="source_file",
+    )
     p.add_argument(
         "-v",
         "--verbose",
