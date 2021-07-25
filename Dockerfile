@@ -9,7 +9,8 @@ RUN apt-get update \
     vim=2:8.2.0716-3ubuntu2 \
     git=1:2.27.0-1ubuntu1.1 \
     python3.8=3.8.10-0ubuntu1~20.10.1 \
-    python3-pip=20.1.1-2
+    python3-pip=20.1.1-2 \
+    tree=1.8.0-1
 
 RUN useradd --create-home appuser
 
