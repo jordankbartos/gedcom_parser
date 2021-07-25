@@ -1,63 +1,17 @@
 #!/usr/bin/python3
 import os
-from arguments import parse_args, validate_args
+from arguments import Arguments
+from parsers.gedcom_file import GedcomFile
 
 
 def save_output():
     return 0
 
 
-def process_args():
-    # Get and check args
-    args = parse_args()
-
-    ret = {
-        "direction": args.dir[0],
-        "person_file": args.person_file[0],
-        "family_file": args.family_file[0],
-        "source_file": args.source_file[0],
-        "gedcom_file": args.gedcom_file[0],
-        "verbose": args.verbose,
-        "no_cont_conc": args.no_cont_conc,
-        "force_string_dates": args.force_string_dates,
-    }
-
-    if ret["verbose"]:
-        os.environ["VERBOSE_OUTPUT"] = "True"
-        print("--Arguments--")
-        print(f"\tdirection: {ret['direction']}")
-        print(f"\tperson_file: {ret['person_file']}")
-        print(f"\tfamily_file: {ret['family_file']}")
-        print(f"\tsource_file: {ret['source_file']}")
-        print(f"\tgedcome_file: {ret['gedcom_file']}")
-        print(f"\tno_cont_conc: {ret['no_cont_conc']}")
-        print(f"\tforce_string_dates: {ret['force_string_dates']}")
-
-    # validate file paths
-    errors = validate_args(
-        direction=ret["direction"],
-        person_file=ret["person_file"],
-        family_file=ret["family_file"],
-        source_file=ret["source_file"],
-        gedcom_file=ret["gedcom_file"],
-        no_cont_conc=ret["no_cont_conc"],
-        force_string_dates=ret["force_string_dates"],
-    )
-
-    if errors:
-        for error in errors:
-            print(f"\t{error}")
-        exit(1)
-    elif ret["verbose"]:
-        print("Validation succeeded")
-
-    return ret
-
-
 if __name__ == "__main__":
 
     # validate and get values from arguments
-    args = process_args()
+    args = Arguments()
     direction = args["direction"]
     person_file = args["person_file"]
     family_file = args["family_file"]
@@ -66,9 +20,6 @@ if __name__ == "__main__":
     verbose = args["verbose"]
     no_cont_conc = args["no_cont_conc"]
     force_string_dates = args["force_string_dates"]
-
-    # have to wait to import this until after env variables are set conditionally
-    from parsers.gedcom_file import GedcomFile
 
     if direction == "GED2CSV":
 

@@ -2,8 +2,6 @@ import re
 from envparse import env
 from typing import Union, List
 
-ENTRY_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
-
 
 class Line:
     def __init__(self, depth, tag, tag_value):
@@ -120,6 +118,8 @@ class Entry:
 
     def __init__(self, lines: List[str], force_string_dates, no_cont_conc):
         # the first line is not like the others. It contians the type of entry, and the id number
+        self.ENTRY_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
+
         self.type = self.get_type_from_line(lines[0])
         self.id = self.get_id_from_line(lines[0])
         self.force_string_dates = force_string_dates
@@ -137,13 +137,13 @@ class Entry:
 
     @staticmethod
     def get_type_from_line(line):
-        if ENTRY_DEBUG:
+        if self.ENTRY_DEBUG:
             assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
         return line.split()[2]
 
     @staticmethod
     def get_id_from_line(line):
-        if ENTRY_DEBUG:
+        if self.ENTRY_DEBUG:
             assert re.match("^0 @[IFS]\d+@ (INDI|FAM|SOUR)$", line)
         return line.split()[1]
 
@@ -195,7 +195,7 @@ class Entry:
                 skip = False
                 ret.append(line)
 
-        if ENTRY_DEBUG:
+        if self.ENTRY_DEBUG:
             print("REMOVE_CONT_CONC results:")
             for x in ret:
                 print(f"\t{x}")
@@ -224,7 +224,7 @@ class Entry:
             else:
                 ret.append(line)
 
-        if ENTRY_DEBUG:
+        if self.ENTRY_DEBUG:
             print("COLLAPSE_CONT_CONC results:")
             for x in ret:
                 print(f"\t{x}")
@@ -304,7 +304,7 @@ class Entry:
 
             return ret
 
-        if ENTRY_DEBUG:
+        if self.ENTRY_DEBUG:
             print("ADD_CONT_CONC input:")
             for x in lines:
                 print(f"\t{x}")
@@ -389,7 +389,7 @@ class Entry:
 
             ret["+".join(active_tags)] = tag_value
 
-        if ENTRY_DEBUG:
+        if self.ENTRY_DEBUG:
             print("--ENTRY AS DICT--")
             for k, v in ret.items():
                 print(f"\t{k}: {v}")
