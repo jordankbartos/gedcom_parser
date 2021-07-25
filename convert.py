@@ -4,7 +4,7 @@ from arguments import parse_args, validate_args
 
 
 def save_output():
-    return 1
+    return 0
 
 
 if __name__ == "__main__":
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         print(f"\tforce_string_dates: {force_string_dates}")
 
     # have to wait to import this until after env variables are set conditionally
-    from parsers.parse import GedcomParser
+    from parsers.gedcom_file import GedcomFile
 
     # validate file paths
     errors = validate_args(
@@ -54,17 +54,15 @@ if __name__ == "__main__":
         with open(gedcom_file, "r") as f:
             gedcom_str = f.read()
 
-        parser = GedcomParser(
+        parser = GedcomFile(
             gedcom_str=gedcom_str,
-            person_csv_str=None,
-            family_csv_str=None,
             no_cont_conc=no_cont_conc,
             force_string_dates=force_string_dates,
         )
 
         if verbose:
             print(f"Converting {gedcom_file} to CSV...")
-        parts = parser.gedcom_to_csv()
+        parts = parser.to_csv_strs()
 
         with open(person_file, "w") as f:
             f.write(parts["INDI"])
@@ -73,24 +71,25 @@ if __name__ == "__main__":
             f.write(parts["FAM"])
 
     elif direction == "CSV2GED":
+        exit(3)
 
-        with open(person_file, "r") as f:
-            person_str = f.read()
+        # with open(person_file, "r") as f:
+        #    person_str = f.read()
 
-        with open(family_file, "r") as f:
-            family_str = f.read()
+        # with open(family_file, "r") as f:
+        #    family_str = f.read()
 
-        parser = GedcomParser(
-            gedcom_str=None,
-            person_csv_str=None,
-            family_csv_str=None,
-            no_cont_conc=no_cont_conc,
-            force_string_dates=force_string_dates,
-        )
+        # parser = GedcomFile(
+        #    gedcom_str=None,
+        #    person_csv_str=None,
+        #    family_csv_str=None,
+        #    no_cont_conc=no_cont_conc,
+        #    force_string_dates=force_string_dates,
+        # )
 
-        if verbose:
-            print(f"Converting {person_file} and {family_file} to GEDCOM...")
-        out_str = parser.csv_to_gedcom()
+        # if verbose:
+        #    print(f"Converting {person_file} and {family_file} to GEDCOM...")
+        # out_str = parser.csv_to_gedcom()
 
     else:
         raise ValueError(f"How did you sneak direction={direction} into the args?")
