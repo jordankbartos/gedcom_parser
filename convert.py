@@ -33,7 +33,14 @@ if __name__ == "__main__":
     from parsers.gedcom_file import GedcomFile
 
     # validate file paths
-    errors = validate_args( direction=direction, person_file=person_file, family_file=family_file, gedcom_file=gedcom_file, no_cont_conc=no_cont_conc, force_string_dates=force_string_dates,)
+    errors = validate_args(
+        direction=direction,
+        person_file=person_file,
+        family_file=family_file,
+        gedcom_file=gedcom_file,
+        no_cont_conc=no_cont_conc,
+        force_string_dates=force_string_dates,
+    )
 
     if errors:
         for error in errors:
