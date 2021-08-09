@@ -12,7 +12,6 @@ from .entry import Entry
 # sets the line length limit for an entry when CREATING a gedcom file. Entries too long to fit
 # in one line are split using CONC
 GEDCOM_MAX_LINE_LENGTH = 80
-PARSER_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
 
 
 class GedcomFile:
@@ -22,6 +21,8 @@ class GedcomFile:
         no_cont_conc,
         force_string_dates,
     ):
+        self.PARSER_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
+
         self.gedcom_str = gedcom_str
 
         self.no_cont_conc = no_cont_conc
@@ -62,7 +63,7 @@ class GedcomFile:
         start_of_sour_section = self.get_start_section("sour")
         end_of_sour_section = self.get_end_section("sour")
 
-        if PARSER_DEBUG:
+        if self.PARSER_DEBUG:
             print("--Determined these indexes for INDI and FAM sections--")
             print(f"\tfirst INDI index: {start_of_indi_section}")
             print(f"\tlast  INDI index: {end_of_indi_section}")
@@ -71,7 +72,7 @@ class GedcomFile:
             print(f"\tfirst SOUR  index: {start_of_sour_section}")
             print(f"\tlast  SOUR  index: {end_of_sour_section}")
 
-        if PARSER_DEBUG:
+        if self.PARSER_DEBUG:
             print("==============PROCESSING INDI ENTRIES================")
             assert (start_of_indi_section is None and end_of_indi_section is None) or (
                 start_of_indi_section is not None and end_of_indi_section is not None
@@ -81,7 +82,7 @@ class GedcomFile:
                 start_of_indi_section, end_of_indi_section
             )
 
-        if PARSER_DEBUG:
+        if self.PARSER_DEBUG:
             print("==============PROCESSING FAM ENTRIES=================")
             assert (start_of_fam_section is None and end_of_fam_section is None) or (
                 start_of_fam_section is not None and end_of_fam_section is not None
@@ -89,7 +90,7 @@ class GedcomFile:
         if start_of_fam_section is not None and end_of_fam_section is not None:
             self.entries["FAM"] = self.get_section_entries(start_of_fam_section, end_of_fam_section)
 
-        if PARSER_DEBUG:
+        if self.PARSER_DEBUG:
             print("==============PROCESSING SOUR ENTRIES================")
             assert (start_of_sour_section is None and end_of_sour_section is None) or (
                 start_of_sour_section is not None and end_of_sour_section is not None
@@ -125,7 +126,7 @@ class GedcomFile:
             while j < len(self.gedcom_lines) and not self.gedcom_lines[j].startswith("0"):
                 j += 1
 
-            if PARSER_DEBUG:
+            if self.PARSER_DEBUG:
                 # Make sure everything is looking ok
                 assert i < j
                 assert i >= start_line_index
@@ -136,7 +137,7 @@ class GedcomFile:
                 print("------------------------")
                 print(f"RECORD LINES {i}-{j}:")
                 for k in range(i, j):
-                    print(f"\t{self.gedcom_lines[k][:-1]}")
+                    print(f"\t{self.gedcom_lines[k]}")
 
             ret.append(
                 Entry(
@@ -166,7 +167,7 @@ class GedcomFile:
         # find first instance of match
         for i, line in enumerate(self.gedcom_lines):
             if pattern.match(line):
-                if PARSER_DEBUG:
+                if self.PARSER_DEBUG:
                     assert line.startswith("0")
                 ret = i
                 break
@@ -195,7 +196,7 @@ class GedcomFile:
 
             if pattern.match(self.gedcom_lines[i]):
 
-                if PARSER_DEBUG:
+                if self.PARSER_DEBUG:
                     assert self.gedcom_lines[i].startswith("0")
 
                 # found the last indi entry
