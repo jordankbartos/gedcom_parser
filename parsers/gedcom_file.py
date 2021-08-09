@@ -137,7 +137,7 @@ class GedcomFile:
                 print("------------------------")
                 print(f"RECORD LINES {i}-{j}:")
                 for k in range(i, j):
-                    print(f"\t{self.gedcom_lines[k][:-1]}")
+                    print(f"\t{self.gedcom_lines[k]}")
 
             ret.append(
                 Entry(
