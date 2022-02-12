@@ -4,7 +4,7 @@ ENV TERM xterm
 
 # Install packages
 RUN apt-get update && apt-get upgrade
- 
+
 RUN apt-get --assume-yes install \
     dialog \
     apt-utils \
@@ -32,10 +32,10 @@ RUN git clone https://github.com/jordankbartos/my_config.git \
     && cd .. \
     && rm -rf my_config
 
-WORKDIR /home/appuser/app
+WORKDIR /home/appuser/app/gedcom_parser
 
 #RUN git config user.email --global "jordankbartos@gmail.com" \
 #    && git config user.name --global "Jordan Bartos" \
-    # && pre-commit install \
+#    && pre-commit install \
 
 CMD ["bash"]
