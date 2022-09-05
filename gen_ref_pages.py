@@ -5,12 +5,17 @@ from pathlib import Path
 import mkdocs_gen_files
 
 for path in sorted(Path("parsers").rglob("*.py")):
+    print("------------------------------")
+    print("path:", path)
 
     module_path = path.with_suffix("")
+    print("module_path:", module_path)
 
     doc_path = path.with_suffix(".md")
+    print("doc_path:", doc_path)
 
     full_doc_path = Path("reference", doc_path)
+    print("full_doc_path:", full_doc_path)
 
 
     parts = list(module_path.parts)
@@ -23,6 +28,7 @@ for path in sorted(Path("parsers").rglob("*.py")):
     with mkdocs_gen_files.open(full_doc_path, "w") as fd:
 
         identifier = ".".join(parts)
+        print("identifier:", identifier)
 
         print("::: " + identifier, file=fd)
 
