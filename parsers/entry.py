@@ -4,6 +4,8 @@ from typing import List, Optional, Union
 
 GEDCOM_MAX_LINE_LENGTH = 80
 
+_LINE_RE = re.compile(r"^(?P<depth>[0-9]+) (?P<tag>[0-9A-Z_]+)(?: (?P<tag_value>.*))?$")
+
 
 class Line:
     """Represents a single line of a gedcom file
@@ -18,8 +20,6 @@ class Line:
     1 DEAT
     2 DATE 1876
     """
-
-    _LINE_RE = re.compile(r"^(?P<depth>[0-9]+) (?P<tag>[0-9A-Z_]+)(?: (?P<tag_value>.*))?$")
 
     def __init__(self, depth: Union[str, int], tag: str, tag_value: Optional[str] = None):
         r"""
@@ -368,9 +368,9 @@ class Entry:
 
                 if (
                     len_depth + len_tag + len_tag_value + num_spaces > GEDCOM_MAX_LINE_LENGTH
-                    or tag_value.find(self._CONT_PLACEHOLDER) != -1
+                    or tag_value.find(Entry._CONT_PLACEHOLDER) != -1
                 ):
-                    newline_index = tag_value.find(self._CONT_PLACEHOLDER)
+                    newline_index = tag_value.find(Entry._CONT_PLACEHOLDER)
 
                     if newline_index != -1:
                         if (
@@ -379,9 +379,9 @@ class Entry:
                             ret = (
                                 True,
                                 "CONT",
-                                tag_value.split(self._CONT_PLACEHOLDER)[0],
-                                self._CONT_PLACEHOLDER.join(
-                                    tag_value.split(self._CONT_PLACEHOLDER)[1:]
+                                tag_value.split(Entry._CONT_PLACEHOLDER)[0],
+                                Entry._CONT_PLACEHOLDER.join(
+                                    tag_value.split(Entry._CONT_PLACEHOLDER)[1:]
                                 ),
                             )
                         else:
@@ -409,7 +409,7 @@ class Entry:
 
             return ret
 
-        if self.ENTRY_DEBUG:
+        if env("VERBOSE_OUTPUT", cast=bool, default=False):
             print("ADD_CONT_CONC input:")
             for x in lines:
                 print(f"\t{x}")
@@ -437,7 +437,7 @@ class Entry:
                 else:
                     ret.append(f"{depth + 1} {new_tag}")
 
-        if PARSER_DEBUG:
+        if env("VERBOSE_OUTPUT", cast=bool, default=False):
             print("ADD_CONT_CONC results:")
             for x in ret:
                 print(f"\t{x}")
@@ -490,7 +490,11 @@ class Entry:
             # adjusting depending on force_string_dates
             if line.tag_value is None:
                 tag_value = self._EMPTY_LINE_PLACEHOLDER
-            elif line.tag == self._DATE_TAG and self.force_string_dates and not tag.startswith("'"):
+            elif (
+                line.tag == self._DATE_TAG
+                and self.force_string_dates
+                and not line.tag.startswith("'")
+            ):
                 tag_value = f"'{line.tag_value}"
             else:
                 tag_value = line.tag_value

@@ -1,45 +1,71 @@
+import logging
 import pandas as pd
 import re
 
 from envparse import env
-from typing import Union
+from typing import Union, Dict, List, Literal, Pattern
 
 from .entry import Entry
 
-# CONT designates a line break within a record
-# CONC continues a line w/o a line break
+LOG = logging.getLogger(__name__)
 
-# sets the line length limit for an entry when CREATING a gedcom file. Entries too long to fit
-# in one line are split using CONC
-GEDCOM_MAX_LINE_LENGTH = 80
+
+_INDI_REGEX = re.compile(r"^\d+ @I\d+@ INDI$")
+# """Pattern object for identifying INDI (individual) record entries"""
+
+_FAM_REGEX = re.compile(r"^\d+ @F\d+@ FAM$")
+# """Pattern object for identifying FAM (family) record entries"""
+
+_SOUR_REGEX = re.compile(r"^\d+ @S\d+@ SOUR$")
+# """Pattern object for identifying SOUR (source) record entries"""
 
 
 class GedcomFile:
+    """Represents the contents of a Gedcom file.
+
+    Takes the contents of a gedcom file and provides an interface for interpreting the contents
+    and converting each section to CSV format.
+
+    Parameters
+    ----------
+    gedcom_str : str
+        The contents of a GEDCOM file as a string
+    no_cont_conc : bool
+        Whether or not to preserve data from CONT (continue) and CONC (concatenate) tags in the
+        gedcom file
+    force_string_dates : bool
+        Date values are prepended with a single quote mark ("'") if True. This helps render dates
+        as strings in Microsoft Excel, e.g.
+
+    Methods
+    -------
+    to_csv_strs()
+        Returns a dictionary
+
+    """
+
     def __init__(
         self,
-        gedcom_str,
-        no_cont_conc,
-        force_string_dates,
-    ):
-        self.PARSER_DEBUG = env("VERBOSE_OUTPUT", cast=bool, default=False)
+        gedcom_str: str,
+        no_cont_conc: bool,
+        force_string_dates: bool,
+    ) -> None:
 
         self.gedcom_str = gedcom_str
-
         self.no_cont_conc = no_cont_conc
         self.force_string_dates = force_string_dates
 
-        self.indi_regex = re.compile(r"^\d+ @I\d+@ INDI$")
-        self.fam_regex = re.compile(r"^\d+ @F\d+@ FAM$")
-        self.sour_regex = re.compile(r"^\d+ @S\d+@ SOUR$")
+    def get_indi_records_csv(self):
+        return self.get_section_csv(section="indi", gedcom_lines=gedcom_lines)
 
-        self.entries = {
-            "INDI": [],
-            "FAM": [],
-            "SOUR": [],
-        }
+    def get_sour_records_csv(self):
+        return self.get_section_csv(section="sour", gedcom_lines=gedcom_lines)
 
-    def to_csv_strs(self):
-        """Converts self into CSV strings
+    def get_fam_records_csv(self):
+        return self.get_section_csv(section="fam", gedcom_lines=gedcom_lines)
+
+    def to_csv_strs(self) -> Dict[str, str]:
+        """Converts gedcom_str into separate CSV strings for indi, fam, and sour records
 
         Parameters
         ----------
@@ -47,169 +73,130 @@ class GedcomFile:
 
         Returns
         -------
-        A dictionary of entry type to csv strings with the following keys:
-            - "INDI": individual entries csv string,
-            - "FAM": family entries csv string,
-            - "SOUR": source entries csv string,
+        Dict[str, str]
+            A dictionary of entry type to csv strings with the following keys:
+                - "INDI": individual entries csv string,
+                - "FAM": family entries csv string,
+                - "SOUR": source entries csv string,
         """
-        # open the file and read lines
-        self.gedcom_lines = self.gedcom_str.split("\n")
-
-        # Find the start and stop for the indi and family sections
-        start_of_indi_section = self.get_start_section("indi")
-        end_of_indi_section = self.get_end_section("indi")
-        start_of_fam_section = self.get_start_section("fam")
-        end_of_fam_section = self.get_end_section("fam")
-        start_of_sour_section = self.get_start_section("sour")
-        end_of_sour_section = self.get_end_section("sour")
-
-        if self.PARSER_DEBUG:
-            print("--Determined these indexes for INDI and FAM sections--")
-            print(f"\tfirst INDI index: {start_of_indi_section}")
-            print(f"\tlast  INDI index: {end_of_indi_section}")
-            print(f"\tfirst FAM  index: {start_of_fam_section}")
-            print(f"\tlast  FAM  index: {end_of_fam_section}")
-            print(f"\tfirst SOUR  index: {start_of_sour_section}")
-            print(f"\tlast  SOUR  index: {end_of_sour_section}")
-
-        if self.PARSER_DEBUG:
-            print("==============PROCESSING INDI ENTRIES================")
-            assert (start_of_indi_section is None and end_of_indi_section is None) or (
-                start_of_indi_section is not None and end_of_indi_section is not None
-            )
-        if start_of_indi_section is not None and end_of_indi_section is not None:
-            self.entries["INDI"] = self.get_section_entries(
-                start_of_indi_section, end_of_indi_section
-            )
-
-        if self.PARSER_DEBUG:
-            print("==============PROCESSING FAM ENTRIES=================")
-            assert (start_of_fam_section is None and end_of_fam_section is None) or (
-                start_of_fam_section is not None and end_of_fam_section is not None
-            )
-        if start_of_fam_section is not None and end_of_fam_section is not None:
-            self.entries["FAM"] = self.get_section_entries(start_of_fam_section, end_of_fam_section)
-
-        if self.PARSER_DEBUG:
-            print("==============PROCESSING SOUR ENTRIES================")
-            assert (start_of_sour_section is None and end_of_sour_section is None) or (
-                start_of_sour_section is not None and end_of_sour_section is not None
-            )
-        if start_of_sour_section is not None and end_of_sour_section is not None:
-            self.entries["SOUR"] = self.get_section_entries(
-                start_of_sour_section, end_of_sour_section
-            )
-
-        self.indi_dicts = [i.to_col_name_dict() for i in self.entries["INDI"]]
-        self.fam_dicts = [f.to_col_name_dict() for f in self.entries["FAM"]]
-        self.sour_dicts = [s.to_col_name_dict() for s in self.entries["SOUR"]]
-
-        self.indi_df = pd.DataFrame(self.indi_dicts)
-        self.fam_df = pd.DataFrame(self.fam_dicts)
-        self.sour_df = pd.DataFrame(self.sour_dicts)
-
-        indi_csv_str = self.indi_df.to_csv()
-        fam_csv_str = self.fam_df.to_csv()
-        sour_csv_str = self.sour_df.to_csv()
+        gedcom_lines = self.gedcom_str.split("\n")
 
         return {
-            "INDI": indi_csv_str,
-            "FAM": fam_csv_str,
-            "SOUR": sour_csv_str,
+            "INDI": self.get_indi_records_csv(),
+            "FAM": self.get_fam_records_csv(),
+            "SOUR": self.get_sour_records_csv(),
         }
 
-    def get_section_entries(self, start_line_index, end_line_index):
-        ret = []
-        i = start_line_index
-        while i <= end_line_index:
-            j = i + 1
-            while j < len(self.gedcom_lines) and not self.gedcom_lines[j].startswith("0"):
-                j += 1
+    def get_section_csv(self, section: Literal["indi", "fam", "sour"], gedcom_lines: List[str]):
+        entries = self._get_section_entries(section=section, gedcom_lines=gedcom_lines)
+        df = self._get_section_df(entries=entries)
+        return self._convert_df_to_csv(df=df)
 
-            if self.PARSER_DEBUG:
+    def _get_section_df(self, entries: List[Entry]) -> pd.DataFrame:
+        return pd.DataFrame(x.to_col_name_dict() for x in entries)
+
+    def _convert_df_to_csv(self, df: pd.DataFrame) -> str:
+        return df.to_csv(index=False)
+
+    def _get_section_entries(
+        self, section: Literal["indi", "fam", "sour"], gedcom_lines: List[str]
+    ) -> List[Entry]:
+        start_line_index = self._get_section_start_index(section, gedcom_lines=gedcom_lines)
+        end_line_index = self._get_section_end_index(section, gedcom_lines=gedcom_lines)
+
+        ret = []
+        if start_line_index is not None:
+            assert end_line_index is not None
+            i = start_line_index
+            while i <= end_line_index:
+                j = i + 1
+                while j < len(gedcom_lines) and not gedcom_lines[j].startswith("0"):
+                    j += 1
+
                 # Make sure everything is looking ok
                 assert i < j
                 assert i >= start_line_index
                 assert j <= end_line_index + 1
-                assert self.gedcom_lines[i].startswith("0")
-                assert self.gedcom_lines[j].startswith("0")
+                assert gedcom_lines[i].startswith("0")
+                assert gedcom_lines[j].startswith("0")
 
-                print("------------------------")
-                print(f"RECORD LINES {i}-{j}:")
+                LOG.debug(f"RECORD LINES {i}-{j}:")
                 for k in range(i, j):
-                    print(f"\t{self.gedcom_lines[k]}")
+                    LOG.debug(f"\t{gedcom_lines[k]}")
 
-            ret.append(
-                Entry(
-                    lines=self.gedcom_lines[i:j],
-                    force_string_dates=self.force_string_dates,
-                    no_cont_conc=self.no_cont_conc,
+                ret.append(
+                    Entry(
+                        lines=gedcom_lines[i:j],
+                        force_string_dates=self.force_string_dates,
+                        no_cont_conc=self.no_cont_conc,
+                    )
                 )
-            )
-            i = j
+                i = j
 
         return ret
 
-    def get_start_section(self, section):
+    def _get_section_start_index(
+        self, section: Literal["indi", "fam", "sour"], gedcom_lines: List[str]
+    ) -> Union[int, None]:
         """Returns the index of the line that begins the first Individual entry in the gedcom file"""
-        ret = None
 
-        # validate input
-        if section == "indi":
-            pattern = self.indi_regex
-        elif section == "fam":
-            pattern = self.fam_regex
-        elif section == "sour":
-            pattern = self.sour_regex
-        else:
-            raise ValueError(f"invalid section type '{section}' provided")
+        pattern = self._get_pattern(section=section)
 
         # find first instance of match
-        for i, line in enumerate(self.gedcom_lines):
+        ret = None
+        for i, line in enumerate(gedcom_lines):
             if pattern.match(line):
-                if self.PARSER_DEBUG:
-                    assert line.startswith("0")
                 ret = i
+                assert line.startswith("0")
                 break
 
+        LOG.debug(f"Start index of {section} determined: {ret}")
         return ret
 
-    def get_end_section(self, section):
+    def _get_section_end_index(
+        self, section: Literal["indi", "fam", "sour"], gedcom_lines: List[str]
+    ) -> int:
         """Returns the index of the line that begins the last Individual entry in the gedcom file"""
+        pattern = self._get_pattern(section=section)
+
         ret = None
 
-        # validate input
-        if section == "indi":
-            pattern = self.indi_regex
-        elif section == "fam":
-            pattern = self.fam_regex
-        elif section == "sour":
-            pattern = self.sour_regex
-        else:
-            raise ValueError(f"invalid section type '{section}' provided")
+        i = len(gedcom_lines) - 1
 
-        i = len(self.gedcom_lines) - 1
-        end_found = False
         # start from the end of the gedcom file and work backwards searching for the last
         # INDI entry
+        end_found = False
         while i > 0 and not end_found:
 
-            if pattern.match(self.gedcom_lines[i]):
+            if pattern.match(gedcom_lines[i]):
 
-                if self.PARSER_DEBUG:
-                    assert self.gedcom_lines[i].startswith("0")
+                assert gedcom_lines[i].startswith("0")
 
                 # found the last indi entry
                 end_found = True
                 i += 1
 
                 # Now start working back forwards to find the end of this indi entry
-                while i < len(self.gedcom_lines) and not self.gedcom_lines[i].startswith("0"):
+                while i < len(gedcom_lines) and not gedcom_lines[i].startswith("0"):
                     i += 1
-                    if self.gedcom_lines[i].startswith("0"):
+                    if gedcom_lines[i].startswith("0"):
                         # i is now set to the index of the line after the end of the last entry. So
                         # subtract one to get back to the last line of the previous entry
                         ret = i - 1
             i -= 1
+
+        LOG.debug(f"End index of {section} determined: {ret}")
+
+        return ret
+
+    def _get_pattern(self, section: Literal["indi", "fam", "sour"]) -> Pattern:
+        if section == "indi":
+            ret = _INDI_REGEX
+        elif section == "fam":
+            ret = _FAM_REGEX
+        elif section == "sour":
+            ret = _SOUR_REGEX
+        else:
+            raise ValueError(f"invalid section type '{section}' provided")
 
         return ret

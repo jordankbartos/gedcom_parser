@@ -1,5 +1,5 @@
 appdirs==1.4.4
-black==21.6b0
+black==22.8.0
 cfgv==3.3.0
 click==8.0.1
 distlib==0.3.2
@@ -9,7 +9,7 @@ identify==2.2.10
 mypy-extensions==0.4.3
 nodeenv==1.6.0
 numpy # ==1.21.0
-pandas==1.1.0
+pandas==1.4.4
 pathspec==0.8.1
 pre-commit==2.13.0
 python-dateutil==2.8.1

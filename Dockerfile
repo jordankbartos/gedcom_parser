@@ -1,16 +1,16 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.10
 
 ENV TERM xterm
 
 # Install packages
-RUN apt-get update && apt-get upgrade
+RUN apt-get update && apt-get -y upgrade
 
 RUN apt-get --assume-yes install \
     dialog \
     apt-utils \
     vim \
     git \
-    python3.8 \
+    python3.10 \
     python3-pip \
     tree
 
