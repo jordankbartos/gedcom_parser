@@ -4,10 +4,9 @@ from typing import List, Optional, Union
 
 GEDCOM_MAX_LINE_LENGTH = 80
 
-_LINE_RE = re.compile(r"^(?P<depth>[0-9]+) (?P<tag>[0-9A-Z_]+)(?: (?P<tag_value>.*))?$")
-
 
 class Line:
+    _LINE_RE = re.compile(r"^(?P<depth>[0-9]+) (?P<tag>[0-9A-Z_]+)(?: (?P<tag_value>.*))?$")
     """Represents a single line of a gedcom file
 
     A line has three parts: depth, tag, and tag_value. The third, tag_value, is optional.

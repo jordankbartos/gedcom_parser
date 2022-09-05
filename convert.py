@@ -32,7 +32,7 @@ if __name__ == "__main__":
         if verbose:
             print(f"Converting {gedcom_file} to CSV...")
 
-        parts = gedcom_file.to_csv_strs()
+        parts = gedcom_file.get_all_records_csv()
 
         with open(indi_file, "w") as f:
             f.write(parts["INDI"])
