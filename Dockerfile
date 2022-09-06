@@ -1,4 +1,5 @@
-FROM ubuntu:22.10
+FROM ubuntu:20.04
+ARG DEBIAN_FRONTEND=noninteractive
 
 ENV TERM xterm
 
@@ -11,6 +12,7 @@ RUN apt-get --assume-yes install \
     vim \
     git \
     python3.10 \
+    python3.8-venv \
     python3-pip \
     tree
 

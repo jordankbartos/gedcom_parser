@@ -5,15 +5,17 @@ plugins:
 - gen-files:
     scripts:
     - docs/gen_ref_pages.py
+- mkdocstrings:
+    handlers:
+      python:
+        selection:
+          docstring_style: numpy
 - literate-nav:
     nav_file: SUMMARY.md
-- mkdocstrings:
-    watch:
-    - parsers
 
-nav:
-- home.md
-- Code Reference:
-  - parsers:
-    - gedcom file: reference/parsers/gedcom_file.md
-    - entry: reference/parsers/entry.md
+#nav:
+#- home.md
+#- Code Reference:
+#  - parsers:
+#    - gedcom file: reference/parsers/gedcom_file.md
+#    - entry: reference/parsers/entry.md
