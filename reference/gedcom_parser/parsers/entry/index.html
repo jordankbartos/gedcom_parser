@@ -7,16 +7,16 @@
         
         
         
-        <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Index - GedCom Parser</title>
-        <link href="../../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="shortcut icon" href="../../../../img/favicon.ico">
+        <title>entry - GedCom Parser</title>
+        <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
-        <link href="../../assets/_mkdocstrings.css" rel="stylesheet">
+        <link href="../../../../assets/_mkdocstrings.css" rel="stylesheet">
 
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="../../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -24,7 +24,7 @@
     <body>
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href="../..">GedCom Parser</a>
+                <a class="navbar-brand" href="../../../..">GedCom Parser</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
@@ -40,12 +40,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" class="nav-link disabled">
+                                <a rel="prev" href="../" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="arguments/" class="nav-link">
+                                <a rel="next" href="../gedcom_file/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -67,17 +67,17 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="2"><a href="#gedcom_parser" class="nav-link">gedcom_parser</a>
+            <li class="nav-item" data-level="2"><a href="#gedcom_parser.parsers.entry" class="nav-link">gedcom_parser.parsers.entry</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-level="2"><a href="#gedcom_parser.arguments" class="nav-link">arguments</a>
+            <li class="nav-item" data-level="2"><a href="#gedcom_parser.parsers.entry.Entry" class="nav-link">Entry</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             
-            <li class="nav-item" data-level="2"><a href="#gedcom_parser.parsers" class="nav-link">parsers</a>
+            <li class="nav-item" data-level="2"><a href="#gedcom_parser.parsers.entry.Line" class="nav-link">Line</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -88,544 +88,8 @@
 
 <div class="doc doc-object doc-module">
 
-<a id="gedcom_parser"></a>
+<a id="gedcom_parser.parsers.entry"></a>
     <div class="doc doc-contents first">
-
-      <p>Gedcom Parser python package</p>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-module">
-
-
-
-<h2 id="gedcom_parser.arguments" class="doc doc-heading">
-        <code>arguments</code>
-
-
-  <span class="doc doc-properties">
-      <small class="doc doc-property doc-property-special"><code>special</code></small>
-  </span>
-
-</h2>
-
-    <div class="doc doc-contents ">
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-module">
-
-
-
-<h3 id="gedcom_parser.arguments.args" class="doc doc-heading">
-        <code>args</code>
-
-
-
-</h3>
-
-    <div class="doc doc-contents ">
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-class">
-
-
-
-<h4 id="gedcom_parser.arguments.args.Arguments" class="doc doc-heading">
-        <code>
-Arguments        </code>
-
-
-
-</h4>
-
-    <div class="doc doc-contents ">
-
-
-        <details class="quote">
-          <summary>Source code in <code>gedcom_parser/arguments/args.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Arguments</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">-%H%M%S&quot;</span><span class="p">)</span>
-
-        <span class="c1"># get and store command-line args</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-
-        <span class="c1"># simple check to ensure arguments check out basically</span>
-        <span class="n">errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_raw_args</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">errors</span><span class="p">:</span>
-            <span class="c1"># derive file names if needed</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">processed_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_raw_args</span><span class="p">()</span>
-
-            <span class="c1"># Final validation. Files actually exist? etc..</span>
-            <span class="n">errors</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">validate_args</span><span class="p">(</span>
-                    <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_args</span><span class="p">[</span><span class="s2">&quot;direction&quot;</span><span class="p">],</span>
-                    <span class="n">gedcom_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_args</span><span class="p">[</span><span class="s2">&quot;gedcom_file&quot;</span><span class="p">],</span>
-                    <span class="n">indi_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_args</span><span class="p">[</span><span class="s2">&quot;indi_file&quot;</span><span class="p">],</span>
-                    <span class="n">fam_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_args</span><span class="p">[</span><span class="s2">&quot;fam_file&quot;</span><span class="p">],</span>
-                    <span class="n">sour_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_args</span><span class="p">[</span><span class="s2">&quot;sour_file&quot;</span><span class="p">],</span>
-                    <span class="n">no_cont_conc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_args</span><span class="p">[</span><span class="s2">&quot;no_cont_conc&quot;</span><span class="p">],</span>
-                    <span class="n">force_string_dates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_args</span><span class="p">[</span><span class="s2">&quot;force_string_dates&quot;</span><span class="p">],</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">error</span> <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">]))</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ARGUMENTS_DEBUG</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Set final arguments:&quot;</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processed_args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ARGUMENTS_DEBUG</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ARGUMENTS_DEBUG</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Arguments Accepted&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">get_arg_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">process_raw_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Get and check args</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="s2">&quot;indi_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">indi_file</span><span class="p">,</span>
-            <span class="s2">&quot;fam_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">fam_file</span><span class="p">,</span>
-            <span class="s2">&quot;sour_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">sour_file</span><span class="p">,</span>
-            <span class="s2">&quot;gedcom_file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">gedcom_file</span><span class="p">,</span>
-            <span class="s2">&quot;verbose&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span>
-            <span class="s2">&quot;no_cont_conc&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">no_cont_conc</span><span class="p">,</span>
-            <span class="s2">&quot;force_string_dates&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">force_string_dates</span><span class="p">,</span>
-        <span class="p">}</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">ARGUMENTS_DEBUG</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;verbose&quot;</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ARGUMENTS_DEBUG</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;VERBOSE_OUTPUT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----Raw Arguments----&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">direction: </span><span class="si">{</span><span class="n">ret</span><span class="p">[</span><span class="s1">&#39;direction&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">indi_file: </span><span class="si">{</span><span class="n">ret</span><span class="p">[</span><span class="s1">&#39;indi_file&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">fam_file: </span><span class="si">{</span><span class="n">ret</span><span class="p">[</span><span class="s1">&#39;fam_file&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">sour_file: </span><span class="si">{</span><span class="n">ret</span><span class="p">[</span><span class="s1">&#39;sour_file&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">gedcome_file: </span><span class="si">{</span><span class="n">ret</span><span class="p">[</span><span class="s1">&#39;gedcom_file&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">no_cont_conc: </span><span class="si">{</span><span class="n">ret</span><span class="p">[</span><span class="s1">&#39;no_cont_conc&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">force_string_dates: </span><span class="si">{</span><span class="n">ret</span><span class="p">[</span><span class="s1">&#39;force_string_dates&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;gedcom_file&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;gedcom_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">derive_file_path</span><span class="p">(</span><span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;gedcom&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.ged&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;gedcom_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="s2">&quot;gedcom_file&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;indi_file&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;indi_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">derive_file_path</span><span class="p">(</span><span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;indi&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;indi_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="s2">&quot;indi_file&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;fam_file&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;fam_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">derive_file_path</span><span class="p">(</span><span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;fam&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;fam_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="s2">&quot;fam_file&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;sour_file&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;sour_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">derive_file_path</span><span class="p">(</span><span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;sour&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;.sour&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;sour_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="s2">&quot;sour_file&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-
-        <span class="k">return</span> <span class="n">ret</span>
-
-    <span class="k">def</span> <span class="nf">validate_args</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">direction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">gedcom_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">indi_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">fam_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">sour_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">no_cont_conc</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">force_string_dates</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Assert that to_file is not an existing filepath and from_file is an existing filepath&quot;&quot;&quot;</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;GED2CSV&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">gedcom_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid gedcom file. File does not exist&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">indi_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid indi file. File already exists! I will not over-write a file!&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">fam_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid fam file. File already exists! I will not over-write a file!&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">sour_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid sour file. File already exists! I will not over-write a file!&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;CSV2GED&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">indi_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid indi file. File does not exist&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">fam_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid fam file. File does not exist&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">sour_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid sour file. File does not exist&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">gedcom_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="s2">&quot;Invalid gedcom file. File already exists! I will not over-write a file!&quot;</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="n">no_cont_conc</span><span class="p">:</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid option &lt;no_cont_conc&gt;. Cannot apply for direction &lt;CSV2GED&gt;.&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">force_string_dates</span><span class="p">:</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="s2">&quot;Invalid option &lt;force_string_dates&gt;. Cannot apply for direction &lt;CSV2GED&gt;.&quot;</span>
-                <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid direction &lt;</span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">&gt;.&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ret</span>
-
-    <span class="k">def</span> <span class="nf">validate_raw_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Performs basic checks to ensure arguments make some sort of sense&quot;&quot;&quot;</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;GED2CSV&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">gedcom_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Must provide a GEDCOM file path for direction &#39;GED2CSV&#39;&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CSV2GED&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">indi_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;A INDI CSV file path must be provided for direction &#39;CSV2GED&#39;&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">fam_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;A FAM CSV file path must be provided for direction &#39;CSV2GED&#39;&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">sour_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;A SOUR CSV file path must be provided for direction &#39;CSV2GED&#39;&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received invalid direction </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">ret</span>
-
-    <span class="k">def</span> <span class="nf">parse_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Convert GEDCOM files to CSV and CSV files to GEDCOM&quot;</span>
-        <span class="p">)</span>
-
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-d&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--direction&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Which way to convert. GED2CSV or CSV2GED&quot;</span><span class="p">,</span>
-            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span>
-            <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-            <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GED2CSV&quot;</span><span class="p">,</span> <span class="s2">&quot;CSV2GED&quot;</span><span class="p">],</span>
-            <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;dir&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-g&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--gedcom&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;File path to the gedcom file to be read or generated&quot;</span><span class="p">,</span>
-            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span>
-            <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;gedcom_file&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-i&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--indi-file&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;File path to the indi csv file to be read or generated&quot;</span><span class="p">,</span>
-            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span>
-            <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;indi_file&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-f&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--fam-file&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;File path to the fam csv file to be read or generated&quot;</span><span class="p">,</span>
-            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span>
-            <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;fam_file&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-s&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--sour-file&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;File path to the sour csv file to be read or generated&quot;</span><span class="p">,</span>
-            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span>
-            <span class="n">nargs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;sour_file&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;-v&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Verbose&quot;</span><span class="p">,</span>
-            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;--no-cont-conc&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Do not attempt to handle CONT or CONC tags. Render &lt;&lt;MISSING DATA&gt;&gt; instead.&quot;</span><span class="p">,</span>
-            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;no_cont_conc&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">p</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-            <span class="s2">&quot;--force-string-dates&quot;</span><span class="p">,</span>
-            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Prepend a `&#39;` to the beginning of each date field value when converting GEDCOM to CSV.&quot;</span><span class="p">,</span>
-            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;force_string_dates&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">derive_file_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="p">,</span> <span class="n">ext</span><span class="p">):</span>
-        <span class="n">parent</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;GedcomParser&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
-
-        <span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">identifier</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="si">}{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ARGUMENTS_DEBUG</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating file path for:&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">{</span><span class="n">ret</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ret</span>
-</code></pre></div>
-        </details>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-method">
-
-
-
-<h5 id="gedcom_parser.arguments.args.Arguments.validate_args" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">validate_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">gedcom_file</span><span class="p">,</span> <span class="n">indi_file</span><span class="p">,</span> <span class="n">fam_file</span><span class="p">,</span> <span class="n">sour_file</span><span class="p">,</span> <span class="n">no_cont_conc</span><span class="p">,</span> <span class="n">force_string_dates</span><span class="p">)</span></code>
-
-
-</h5>
-
-    <div class="doc doc-contents ">
-
-      <p>Assert that to_file is not an existing filepath and from_file is an existing filepath</p>
-
-        <details class="quote">
-          <summary>Source code in <code>gedcom_parser/arguments/args.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">validate_args</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">direction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">gedcom_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">indi_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">fam_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">sour_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">no_cont_conc</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="n">force_string_dates</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-<span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Assert that to_file is not an existing filepath and from_file is an existing filepath&quot;&quot;&quot;</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;GED2CSV&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">gedcom_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid gedcom file. File does not exist&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">indi_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid indi file. File already exists! I will not over-write a file!&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">fam_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid fam file. File already exists! I will not over-write a file!&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">sour_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid sour file. File already exists! I will not over-write a file!&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;CSV2GED&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">indi_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid indi file. File does not exist&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">fam_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid fam file. File does not exist&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">sour_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid sour file. File does not exist&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">gedcom_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid gedcom file. File already exists! I will not over-write a file!&quot;</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">no_cont_conc</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Invalid option &lt;no_cont_conc&gt;. Cannot apply for direction &lt;CSV2GED&gt;.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">force_string_dates</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid option &lt;force_string_dates&gt;. Cannot apply for direction &lt;CSV2GED&gt;.&quot;</span>
-            <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid direction &lt;</span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">&gt;.&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ret</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-method">
-
-
-
-<h5 id="gedcom_parser.arguments.args.Arguments.validate_raw_args" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">validate_raw_args</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
-
-
-</h5>
-
-    <div class="doc doc-contents ">
-
-      <p>Performs basic checks to ensure arguments make some sort of sense</p>
-
-        <details class="quote">
-          <summary>Source code in <code>gedcom_parser/arguments/args.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">validate_raw_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Performs basic checks to ensure arguments make some sort of sense&quot;&quot;&quot;</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;GED2CSV&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">gedcom_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Must provide a GEDCOM file path for direction &#39;GED2CSV&#39;&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CSV2GED&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">indi_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;A INDI CSV file path must be provided for direction &#39;CSV2GED&#39;&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">fam_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;A FAM CSV file path must be provided for direction &#39;CSV2GED&#39;&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">sour_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;A SOUR CSV file path must be provided for direction &#39;CSV2GED&#39;&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received invalid direction </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_args</span><span class="o">.</span><span class="n">dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">ret</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-
-
-  </div>
-
-    </div>
-
-  </div>
-
-
-
-
-
-
-
-  </div>
-
-    </div>
-
-  </div>
-
-
-
-
-  </div>
-
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-module">
-
-
-
-<h2 id="gedcom_parser.parsers" class="doc doc-heading">
-        <code>parsers</code>
-
-
-  <span class="doc doc-properties">
-      <small class="doc doc-property doc-property-special"><code>special</code></small>
-  </span>
-
-</h2>
-
-    <div class="doc doc-contents ">
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-module">
-
-
-
-<h3 id="gedcom_parser.parsers.entry" class="doc doc-heading">
-        <code>entry</code>
-
-
-
-</h3>
-
-    <div class="doc doc-contents ">
 
       <p>Entry!!!</p>
 
@@ -644,13 +108,13 @@ Arguments        </code>
 
 
 
-<h4 id="gedcom_parser.parsers.entry.Entry" class="doc doc-heading">
+<h2 id="gedcom_parser.parsers.entry.Entry" class="doc doc-heading">
         <code>
 Entry        </code>
 
 
 
-</h4>
+</h2>
 
     <div class="doc doc-contents ">
 
@@ -1049,7 +513,7 @@ Entry        </code>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Entry.lines" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Entry.lines" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></code>
 
   <span class="doc doc-properties">
@@ -1057,7 +521,7 @@ Entry        </code>
       <small class="doc doc-property doc-property-writable"><code>writable</code></small>
   </span>
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
@@ -1077,23 +541,23 @@ Entry        </code>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Entry.collapse_cont_conc" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Entry.collapse_cont_conc" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">collapse_cont_conc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">)</span></code>
 
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
       <p>Accepts a list of strings, combines lines that are contineud via CONT/CONC. Returns the modified list</p>
-<h6 id="gedcom_parser.parsers.entry.Entry.collapse_cont_conc--parameters">Parameters</h6>
+<h5 id="gedcom_parser.parsers.entry.Entry.collapse_cont_conc--parameters">Parameters</h5>
 <p>!!! lines "List[str]"
     A list of gedcom file lines</p>
-<h6 id="gedcom_parser.parsers.entry.Entry.collapse_cont_conc--returns">Returns</h6>
+<h5 id="gedcom_parser.parsers.entry.Entry.collapse_cont_conc--returns">Returns</h5>
 <p>List[str]
     The processed gedcome file lines with CONT and CONC folded up into the lines that they
     continued/concatenated</p>
-<h6 id="gedcom_parser.parsers.entry.Entry.collapse_cont_conc--example">Example</h6>
+<h5 id="gedcom_parser.parsers.entry.Entry.collapse_cont_conc--example">Example</h5>
 <p>Input: ["0 NOTE This is a long", "1 CONT long long long ", "1 CONC long long long note"]
 Output: ["0 NOTE This is a long&lt;<CONT>&gt;long long long long long long note"]</p>
 
@@ -1171,14 +635,14 @@ Output: ["0 NOTE This is a long&lt;<CONT>&gt;long long long long long long note"
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Entry.get_first_line_dict" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Entry.get_first_line_dict" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">get_first_line_dict</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-staticmethod"><code>staticmethod</code></small>
   </span>
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
@@ -1206,22 +670,22 @@ Output: ["0 NOTE This is a long&lt;<CONT>&gt;long long long long long long note"
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Entry.remove_cont_conc" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Entry.remove_cont_conc" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">remove_cont_conc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">)</span></code>
 
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
       <p>Removes CONT and CONC tags from a list of lines. Replaces them with a warning string</p>
-<h6 id="gedcom_parser.parsers.entry.Entry.remove_cont_conc--parameters">Parameters</h6>
+<h5 id="gedcom_parser.parsers.entry.Entry.remove_cont_conc--parameters">Parameters</h5>
 <p>!!! lines "List[str]"
     A list of gedcom file lines</p>
-<h6 id="gedcom_parser.parsers.entry.Entry.remove_cont_conc--returns">Returns</h6>
+<h5 id="gedcom_parser.parsers.entry.Entry.remove_cont_conc--returns">Returns</h5>
 <p>List[str]
     The processed gedcome file lines with CONT and CONC tags removed</p>
-<h6 id="gedcom_parser.parsers.entry.Entry.remove_cont_conc--example">Example</h6>
+<h5 id="gedcom_parser.parsers.entry.Entry.remove_cont_conc--example">Example</h5>
 <p>Input: ["0 NOTE This is a long", "1 CONT long long long ", "1 CONC long long long note"]
 Output: ["0 NOTE This is a long&lt;<MISSING DATA>&gt;"]</p>
 
@@ -1301,11 +765,11 @@ Output: ["0 NOTE This is a long&lt;<MISSING DATA>&gt;"]</p>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Entry.to_col_name_dict" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Entry.to_col_name_dict" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">to_col_name_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
 
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
@@ -1427,13 +891,13 @@ CSV file. E.g.</p>
 
 
 
-<h4 id="gedcom_parser.parsers.entry.Line" class="doc doc-heading">
+<h2 id="gedcom_parser.parsers.entry.Line" class="doc doc-heading">
         <code>
 Line        </code>
 
 
 
-</h4>
+</h2>
 
     <div class="doc doc-contents ">
 
@@ -1598,18 +1062,18 @@ Line        </code>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Line.__init__" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Line.__init__" class="doc doc-heading">
 <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">tag_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-special"><code>special</code></small>
   </span>
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
-      <h6 id="gedcom_parser.parsers.entry.Line.__init__--parameters">Parameters</h6>
+      <h5 id="gedcom_parser.parsers.entry.Line.__init__--parameters">Parameters</h5>
 <p>!!! depth "Union[str, int]"
     The depth of the gedcom file line. Depth is the first part of a line entry. Typically a single digit 0-3
 !!! tag "str"
@@ -1645,14 +1109,14 @@ Line        </code>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Line.from_str" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Line.from_str" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">from_str</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
   </span>
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
@@ -1676,14 +1140,14 @@ Line        </code>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Line.get_depth_from_line" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Line.get_depth_from_line" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">get_depth_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-staticmethod"><code>staticmethod</code></small>
   </span>
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
@@ -1720,21 +1184,21 @@ property of a NAME line, probably).</p>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Line.get_parts_from_line" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Line.get_parts_from_line" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">get_parts_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-staticmethod"><code>staticmethod</code></small>
   </span>
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
       <p>Accepts a gedcome line, parses its constituent parts and returns them as a dictionary</p>
-<h6 id="gedcom_parser.parsers.entry.Line.get_parts_from_line--parameters">Parameters</h6>
+<h5 id="gedcom_parser.parsers.entry.Line.get_parts_from_line--parameters">Parameters</h5>
 <p>line: str</p>
-<h6 id="gedcom_parser.parsers.entry.Line.get_parts_from_line--returns">Returns</h6>
+<h5 id="gedcom_parser.parsers.entry.Line.get_parts_from_line--returns">Returns</h5>
 <p>dict
     with keys "depth", "tag", and "tag_value". All values in the dict are strings, though "tag_value"
     may have a value of None.</p>
@@ -1774,14 +1238,14 @@ property of a NAME line, probably).</p>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Line.get_tag_from_line" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Line.get_tag_from_line" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">get_tag_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-staticmethod"><code>staticmethod</code></small>
   </span>
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
@@ -1805,14 +1269,14 @@ property of a NAME line, probably).</p>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Line.get_tag_value_from_line" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Line.get_tag_value_from_line" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">get_tag_value_from_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></code>
 
   <span class="doc doc-properties">
       <small class="doc doc-property doc-property-staticmethod"><code>staticmethod</code></small>
   </span>
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
@@ -1844,11 +1308,11 @@ E.g. the line '1 BIRT' returns None</p>
 
 
 
-<h5 id="gedcom_parser.parsers.entry.Line.to_str" class="doc doc-heading">
+<h3 id="gedcom_parser.parsers.entry.Line.to_str" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
 
 
-</h5>
+</h3>
 
     <div class="doc doc-contents ">
 
@@ -1888,488 +1352,6 @@ E.g. the line '1 BIRT' returns None</p>
 
     </div>
 
-  </div>
-
-
-
-  <div class="doc doc-object doc-module">
-
-
-
-<h3 id="gedcom_parser.parsers.gedcom_file" class="doc doc-heading">
-        <code>gedcom_file</code>
-
-
-
-</h3>
-
-    <div class="doc doc-contents ">
-
-      <p>Contains the GedcomFile class which is the main entry point for parsing a .ged file</p>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-class">
-
-
-
-<h4 id="gedcom_parser.parsers.gedcom_file.GedcomFile" class="doc doc-heading">
-        <code>
-GedcomFile        </code>
-
-
-
-</h4>
-
-    <div class="doc doc-contents ">
-
-      <p>Represents the contents of a Gedcom file.</p>
-<p>Takes the contents of a gedcom file and provides an interface for interpreting the contents
-and converting each section to CSV format.</p>
-<h6 id="gedcom_parser.parsers.gedcom_file.GedcomFile--parameters">Parameters</h6>
-<p>gedcom_str : str
-    The contents of a GEDCOM file as a string
-no_cont_conc : bool
-    Whether or not to preserve data from CONT (continue) and CONC (concatenate) tags in the
-    gedcom file
-force_string_dates : bool
-    Date values are prepended with a single quote mark ("'") if True. This helps render dates
-    as strings in Microsoft Excel, e.g.</p>
-<h6 id="gedcom_parser.parsers.gedcom_file.GedcomFile--methods">Methods</h6>
-<p>get_all_records_csv(encoding="utf-8")
-    Returns a dictionary of CSV format strings. Keys are "INDI", "FAM", and "SOUR".
-get_section_records_csv(section, encoding="utf-8")
-    Returns the individual records formatted as a CSV</p>
-
-        <details class="quote">
-          <summary>Source code in <code>gedcom_parser/parsers/gedcom_file.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">GedcomFile</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Represents the contents of a Gedcom file.</span>
-
-<span class="sd">    Takes the contents of a gedcom file and provides an interface for interpreting the contents</span>
-<span class="sd">    and converting each section to CSV format.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    gedcom_str : str</span>
-<span class="sd">        The contents of a GEDCOM file as a string</span>
-<span class="sd">    no_cont_conc : bool</span>
-<span class="sd">        Whether or not to preserve data from CONT (continue) and CONC (concatenate) tags in the</span>
-<span class="sd">        gedcom file</span>
-<span class="sd">    force_string_dates : bool</span>
-<span class="sd">        Date values are prepended with a single quote mark (&quot;&#39;&quot;) if True. This helps render dates</span>
-<span class="sd">        as strings in Microsoft Excel, e.g.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    get_all_records_csv(encoding=&quot;utf-8&quot;)</span>
-<span class="sd">        Returns a dictionary of CSV format strings. Keys are &quot;INDI&quot;, &quot;FAM&quot;, and &quot;SOUR&quot;.</span>
-<span class="sd">    get_section_records_csv(section, encoding=&quot;utf-8&quot;)</span>
-<span class="sd">        Returns the individual records formatted as a CSV</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">gedcom_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">no_cont_conc</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-        <span class="n">force_string_dates</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span> <span class="o">=</span> <span class="n">gedcom_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">no_cont_conc</span> <span class="o">=</span> <span class="n">no_cont_conc</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">force_string_dates</span> <span class="o">=</span> <span class="n">force_string_dates</span>
-
-    <span class="k">def</span> <span class="nf">get_all_records_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Converts gedcom_str into separate CSV strings for indi, fam, and sour records</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        encoding : str, default=&quot;utf-8&quot;</span>
-<span class="sd">            encoding type to use when creating CSV strings.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Dict[str, str]</span>
-<span class="sd">            A dictionary of entry type to csv strings with the following keys:</span>
-<span class="sd">                - &quot;INDI&quot;: individual entries csv string,</span>
-<span class="sd">                - &quot;FAM&quot;: family entries csv string,</span>
-<span class="sd">                - &quot;SOUR&quot;: source entries csv string,</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;INDI&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_section_records_csv</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">&quot;indi&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">),</span>
-            <span class="s2">&quot;FAM&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_section_records_csv</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">&quot;fam&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">),</span>
-            <span class="s2">&quot;SOUR&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_section_records_csv</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">&quot;sour&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">),</span>
-        <span class="p">}</span>
-
-    <span class="k">def</span> <span class="nf">get_section_records_csv</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;indi&quot;</span><span class="p">,</span> <span class="s2">&quot;fam&quot;</span><span class="p">,</span> <span class="s2">&quot;sour&quot;</span><span class="p">],</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the records of a type as a CSV formatted string</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        section : Literal[&amp;quot;indi&amp;quot;, &amp;quot;fam&amp;quot;, &amp;quot;sour&amp;quot;]</span>
-<span class="sd">            Which section-type to convert to CSV and return</span>
-<span class="sd">        encoding : str, default=&quot;utf-8&quot;</span>
-<span class="sd">            encoding type to use when creating CSV strings.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        str</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_entries</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">)</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_entries_df</span><span class="p">(</span><span class="n">entries</span><span class="o">=</span><span class="n">entries</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_df_to_csv</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_get_entries_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Entry</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Converts a list of entries into a pandas DataFrame object</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        entries : List[Entry]</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        pd.DataFrame</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">to_col_name_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_convert_df_to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Accepts a dataframe and returns it formatted as a CSV string</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        df : pd.DataFrame</span>
-<span class="sd">        encoding : str, default=&quot;utf-8&quot;</span>
-<span class="sd">            encoding type to use when creating CSV strings.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        str</span>
-<span class="sd">            A CSV-formatted string with the contents of df</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_get_section_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;indi&quot;</span><span class="p">,</span> <span class="s2">&quot;fam&quot;</span><span class="p">,</span> <span class="s2">&quot;sour&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Entry</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Parses a section of the gedcom string and instantiates Entry items for the section</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        section : Literal[&amp;quot;indi&amp;quot;, &amp;quot;fam&amp;quot;, &amp;quot;sour&amp;quot;]</span>
-<span class="sd">            Which section of the gedcom string to process</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        List[Entry]</span>
-<span class="sd">            A list of Entry objects, one for each primary 0-level entry in the given section</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        RuntimeError</span>
-<span class="sd">            if the section boundaries cannot be determined from the gedcom file. This indicates</span>
-<span class="sd">            a mal-formed gedcom file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="n">start_line_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_start_index</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">)</span>
-        <span class="n">end_line_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_end_index</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">start_line_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">end_line_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Cannot determine boundaries of </span><span class="si">{</span><span class="n">section</span><span class="si">}</span><span class="s2"> in the provided gedcom string.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;  Ensure that the GEDCOM file is formatted correctly and try again.&quot;</span>
-            <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">start_line_index</span><span class="p">:</span>
-
-            <span class="k">assert</span> <span class="n">end_line_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-
-            <span class="n">i</span> <span class="o">=</span> <span class="n">start_line_index</span>
-            <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">end_line_index</span><span class="p">:</span>
-                <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
-
-                <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">):</span>
-                    <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
-
-                <span class="k">assert</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">end_line_index</span> <span class="o">+</span> <span class="mi">1</span>
-                <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
-                <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
-
-                <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RECORD LINES </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
-                    <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-                <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">Entry</span><span class="p">(</span>
-                        <span class="n">lines</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span><span class="p">],</span>
-                        <span class="n">force_string_dates</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">force_string_dates</span><span class="p">,</span>
-                        <span class="n">no_cont_conc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">no_cont_conc</span><span class="p">,</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">i</span> <span class="o">=</span> <span class="n">j</span>
-
-        <span class="k">return</span> <span class="n">ret</span>
-
-    <span class="k">def</span> <span class="nf">_get_section_start_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;indi&quot;</span><span class="p">,</span> <span class="s2">&quot;fam&quot;</span><span class="p">,</span> <span class="s2">&quot;sour&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the section start line index</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        section : Literal[&amp;quot;indi&amp;quot;, &amp;quot;fam&amp;quot;, &amp;quot;sour&amp;quot;]</span>
-<span class="sd">            Which section to seek the beginning of</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Union[int, None]</span>
-<span class="sd">            The line index (zero-indexed) of the gedcom string that marks the beginning of the</span>
-<span class="sd">            requested section. If None is returned, this indicates the section is absent from</span>
-<span class="sd">            the gedcom file</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_entry_regex_pattern</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">)</span>
-
-        <span class="c1"># find first instance of match</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-                <span class="n">ret</span> <span class="o">=</span> <span class="n">i</span>
-                <span class="k">break</span>
-
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start index of </span><span class="si">{</span><span class="n">section</span><span class="si">}</span><span class="s2"> determined: </span><span class="si">{</span><span class="n">ret</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ret</span>
-
-    <span class="k">def</span> <span class="nf">_get_section_end_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;indi&quot;</span><span class="p">,</span> <span class="s2">&quot;fam&quot;</span><span class="p">,</span> <span class="s2">&quot;sour&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the section end line index</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        section : Literal[&amp;quot;indi&amp;quot;, &amp;quot;fam&amp;quot;, &amp;quot;sour&amp;quot;]</span>
-<span class="sd">            Which section to seek the end of</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Union[int, None]</span>
-<span class="sd">            The line index (zero-indexed) of the gedcom string that marks the end of the</span>
-<span class="sd">            requested section. If None is returned, this indicates the section is absent from</span>
-<span class="sd">            the gedcom file</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_entry_regex_pattern</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">)</span>
-
-        <span class="n">ret</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="n">i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-
-        <span class="c1"># start from the end of the gedcom file and work backwards searching for the last line that</span>
-        <span class="c1"># matches the provided entry pattern</span>
-        <span class="n">end_found</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">end_found</span><span class="p">:</span>
-
-            <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
-
-                <span class="n">end_found</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-
-                <span class="c1"># Now start working back forwards to find the end of this indi entry</span>
-                <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">):</span>
-                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gedcom_lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">):</span>
-                        <span class="n">ret</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
-
-        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;End index of </span><span class="si">{</span><span class="n">section</span><span class="si">}</span><span class="s2"> determined: </span><span class="si">{</span><span class="n">ret</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">ret</span>
-
-    <span class="k">def</span> <span class="nf">_get_entry_regex_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;indi&quot;</span><span class="p">,</span> <span class="s2">&quot;fam&quot;</span><span class="p">,</span> <span class="s2">&quot;sour&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Pattern</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns a compiled regex pattern for matching 0-level entries for the given section type</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        section : Literal[&amp;quot;indi&amp;quot;, &amp;quot;fam&amp;quot;, &amp;quot;sour&amp;quot;]</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        Pattern</span>
-<span class="sd">            a compiled regex pattern that will match 0-level entries of the requested type</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        ValueError</span>
-<span class="sd">            if the provided section value does not match one of the available patterns</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">section</span> <span class="o">==</span> <span class="s2">&quot;indi&quot;</span><span class="p">:</span>
-            <span class="n">ret</span> <span class="o">=</span> <span class="n">_INDI_REGEX</span>
-        <span class="k">elif</span> <span class="n">section</span> <span class="o">==</span> <span class="s2">&quot;fam&quot;</span><span class="p">:</span>
-            <span class="n">ret</span> <span class="o">=</span> <span class="n">_FAM_REGEX</span>
-        <span class="k">elif</span> <span class="n">section</span> <span class="o">==</span> <span class="s2">&quot;sour&quot;</span><span class="p">:</span>
-            <span class="n">ret</span> <span class="o">=</span> <span class="n">_SOUR_REGEX</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;invalid section type &#39;</span><span class="si">{</span><span class="n">section</span><span class="si">}</span><span class="s2">&#39; provided&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">ret</span>
-</code></pre></div>
-        </details>
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-object doc-method">
-
-
-
-<h5 id="gedcom_parser.parsers.gedcom_file.GedcomFile.get_all_records_csv" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_all_records_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span></code>
-
-
-</h5>
-
-    <div class="doc doc-contents ">
-
-      <p>Converts gedcom_str into separate CSV strings for indi, fam, and sour records</p>
-<h6 id="gedcom_parser.parsers.gedcom_file.GedcomFile.get_all_records_csv--parameters">Parameters</h6>
-<p>encoding : str, default="utf-8"
-    encoding type to use when creating CSV strings.</p>
-<h6 id="gedcom_parser.parsers.gedcom_file.GedcomFile.get_all_records_csv--returns">Returns</h6>
-<p>Dict[str, str]
-    A dictionary of entry type to csv strings with the following keys:
-        - "INDI": individual entries csv string,
-        - "FAM": family entries csv string,
-        - "SOUR": source entries csv string,</p>
-
-        <details class="quote">
-          <summary>Source code in <code>gedcom_parser/parsers/gedcom_file.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_all_records_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Converts gedcom_str into separate CSV strings for indi, fam, and sour records</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    encoding : str, default=&quot;utf-8&quot;</span>
-<span class="sd">        encoding type to use when creating CSV strings.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    Dict[str, str]</span>
-<span class="sd">        A dictionary of entry type to csv strings with the following keys:</span>
-<span class="sd">            - &quot;INDI&quot;: individual entries csv string,</span>
-<span class="sd">            - &quot;FAM&quot;: family entries csv string,</span>
-<span class="sd">            - &quot;SOUR&quot;: source entries csv string,</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;INDI&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_section_records_csv</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">&quot;indi&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">),</span>
-        <span class="s2">&quot;FAM&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_section_records_csv</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">&quot;fam&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">),</span>
-        <span class="s2">&quot;SOUR&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_section_records_csv</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">&quot;sour&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">),</span>
-    <span class="p">}</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-method">
-
-
-
-<h5 id="gedcom_parser.parsers.gedcom_file.GedcomFile.get_section_records_csv" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">get_section_records_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span></code>
-
-
-</h5>
-
-    <div class="doc doc-contents ">
-
-      <p>Returns the records of a type as a CSV formatted string</p>
-<h6 id="gedcom_parser.parsers.gedcom_file.GedcomFile.get_section_records_csv--parameters">Parameters</h6>
-<p>section : Literal[&quot;indi&quot;, &quot;fam&quot;, &quot;sour&quot;]
-    Which section-type to convert to CSV and return
-encoding : str, default="utf-8"
-    encoding type to use when creating CSV strings.</p>
-<h6 id="gedcom_parser.parsers.gedcom_file.GedcomFile.get_section_records_csv--returns">Returns</h6>
-<p>str</p>
-
-        <details class="quote">
-          <summary>Source code in <code>gedcom_parser/parsers/gedcom_file.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_section_records_csv</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;indi&quot;</span><span class="p">,</span> <span class="s2">&quot;fam&quot;</span><span class="p">,</span> <span class="s2">&quot;sour&quot;</span><span class="p">],</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Returns the records of a type as a CSV formatted string</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    section : Literal[&amp;quot;indi&amp;quot;, &amp;quot;fam&amp;quot;, &amp;quot;sour&amp;quot;]</span>
-<span class="sd">        Which section-type to convert to CSV and return</span>
-<span class="sd">    encoding : str, default=&quot;utf-8&quot;</span>
-<span class="sd">        encoding type to use when creating CSV strings.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    str</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_section_entries</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_entries_df</span><span class="p">(</span><span class="n">entries</span><span class="o">=</span><span class="n">entries</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_df_to_csv</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
-</code></pre></div>
-        </details>
-    </div>
-
-  </div>
-
-
-
-
-
-  </div>
-
-    </div>
-
-  </div>
-
-
-
-
-
-
-
-  </div>
-
-    </div>
-
-  </div>
-
-
-
-
-  </div>
-
-    </div>
-
-  </div>
-
-
-
-
-  </div>
-
-    </div>
-
   </div></div>
             </div>
         </div>
@@ -2379,11 +1361,11 @@ encoding : str, default="utf-8"
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "../..",
+            var base_url = "../../../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../../../../js/base.js" defer></script>
+        <script src="../../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
