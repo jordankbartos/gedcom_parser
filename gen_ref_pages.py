@@ -3,7 +3,7 @@ import mkdocs_gen_files
 
 nav = mkdocs_gen_files.Nav()
 
-for path in sorted(Path("parsers").rglob("*.py")):
+for path in sorted(Path("gedcom_parser").rglob("*.py")):
     print("===================================")
     module_path = path.with_suffix("")
     doc_path = path.with_suffix(".md")
