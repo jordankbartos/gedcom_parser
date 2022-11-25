@@ -1,21 +1,37 @@
 site_name: GedCom Parser
-
+#
+#
+#plugins:
+#- search
+#- gen-files:
+#    scripts:
+#    - docs/gen_ref_pages.py
+#- mkdocstrings:
+#    handlers:
+#      python:
+#        selection:
+#          docstring_style: numpy
+#    watch:
+#    - gedcom_parser
+#- literate-nav:
+#    nav_file: SUMMARY.md
+#
 plugins:
 - search
 - gen-files:
     scripts:
     - docs/gen_ref_pages.py
+- section-index
 - mkdocstrings:
+    watch:
+    - gedcom_parser
     handlers:
-      python:
-        selection:
-          docstring_style: numpy
+      handlers:
+        python:
+          selection:
+            docstring_style: numpy
 - literate-nav:
     nav_file: SUMMARY.md
-
-#theme:
-#  name: readthedocs
-
 
 nav:
 - Code Reference: reference/
