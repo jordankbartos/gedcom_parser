@@ -1,10 +1,11 @@
 #!/usr/bin/python3
-import os
+import logging
 from arguments import Arguments
 from parsers.gedcom_file import GedcomFile
 
 
 if __name__ == "__main__":
+    logging.basicConfig(filename="log.txt", level=logging.DEBUG, filemode="w")
 
     # validate and get values from arguments
     args = Arguments()
@@ -19,7 +20,7 @@ if __name__ == "__main__":
 
     if direction == "GED2CSV":
 
-        with open(gedcom_file, "r") as f:
+        with open(gedcom_file, "r", encoding="utf-8") as f:
             gedcom_str = f.read()
 
         gedcom_file = GedcomFile(
@@ -31,7 +32,7 @@ if __name__ == "__main__":
         if verbose:
             print(f"Converting {gedcom_file} to CSV...")
 
-        parts = gedcom_file.to_csv_strs()
+        parts = gedcom_file.get_all_records_csv()
 
         with open(indi_file, "w") as f:
             f.write(parts["INDI"])
